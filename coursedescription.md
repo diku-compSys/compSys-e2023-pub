@@ -1,4 +1,4 @@
-# Course Description for Computer Systems
+# Course Description for Computer Systems 2023/24
 
 CompSys is giving a general introduction to computer systems. You will learn how computers works at a basic but fundamental level, how this reflects to the programs that you write, and understand the performance characteristic for these. We will cover topics from Machine architecture, Operating Systems, Computer Networks, and basic IT-Security. We will also introduce you to the C programming language, which will be used throughout the course.
 
@@ -11,12 +11,6 @@ We do not ask you to read ahead in the material. Also do not start to learn C, w
 
 You can find resources at last years [DIKU Summer of Programming](https://github.com/diku-summer-programming/fun). You can use it to get inspiration for your ideas.
 
-<!-- It is also important that you have looked into the tools that are needed for the course, so we encourage you to look at the [Tools page](tools/README.md).
- -->
-
-<!-- ### Teaching philosophy -->
-
-
 
 ### Github as course page
 Most material will be posted to Github in this repository. We recommend that you clone it to your machine and that you follow the updates that are made, by reading the log.
@@ -26,13 +20,14 @@ Most material will be posted to Github in this repository. We recommend that you
 In the following is given a short overall description of the course. More details can be found further down.
 
 ### Teaching Material
+We will use material from the following sources:
 
  * [COD] Computer Organization and Design, RISC-V Edition: The Hardware Software Interface, David A. Hennessy and John L. Patterson, 2nd edition, Morgan Kaufmann, ISBN: 978-0128203316
  * [KR] Computer Networking: A Top-Down Approach, James F. Kurose and Keith W. Ross, Pearson, 8th and Global Edition, 2021, ISBN 13: 978-0135928608.
  * [JG] Modern C, Jens Gustedt, Oct. 10, 2019, http://modernc.gforge.inria.fr/.
  * Some more notes and book chapters that will be made available through the detailed course schedule.
 
-BOH and KR will be available at Academic Books at Biocenteret:
+COD and KR will be available at Academic Books at Biocenteret:
 
   https://www.academicbooks.dk/da/pensumlister
 
@@ -71,30 +66,30 @@ To qualify for the exam, a minimum number of points must be gained through the a
 It is also important to note, that the main purpose of the assignment is _not_ to prepare you for the exam; that is what the exercise classes are for. The assignments will focus on larger implementations and the practical learning goals of the course. Some questions in the exam will relate to the assignments, but qualifying of the exam (and even fully solving the assignments) will not be enough preparation to pass the exam. You need to make the exercises and the best way is to come to the exercise classes.
 
 ## Manning
+
 Teachers:
+
  * Michael Kirkedal Thomsen (course organiser)
  * David Marchant
  * Finn Schirmer Andersen
- * Troels Henriksen
 
 TAs:
 
-  * Asbjørn Munk
-  * Christian Arboe Franck
-  * Iben Lilholm
-  * Johan Topp
-  * Julian Pedersen
-  * Jóhann Utne
-  * Kjartan Johannesen
+ * Axel Kanne
+ * Christian Franck
+ * Jakob Holst Svenningsen
+ * Jóhann Utne
+ * Kjartan Martin Johannesen
+ * Lars Peter Jeppesen
+ * Lucas Haahr Yri
 
 ## Lectures
 
- * Mondays at 13:15-15:00
- * Wednesdays at 10:15-12:00
+ * Mondays at 13:15-15:00 in AKB Aud1
+ * Wednesdays at 10:15-12:00 in HCØ Aud1
 
-All lectures are held in HCØ Aud1.
 
-## Exercise Classes (expected)
+## Exercise Classes
 Exercises will mainly be with physical help.
 
  * Mondays 15:15-17:00
@@ -104,64 +99,62 @@ Exercises will mainly be with physical help.
 
 <!-- Week 45, no teaching Wednesday, but Friday 10:15 - 12:00 -->
 
-<!-- See [skema.ku.dk](https://skema.ku.dk/tt/tt.asp?SDB=KU2021&language=DK&folder=Reporting&style=textspreadsheet&type=module&idtype=id&id=95292&weeks=1-27&days=1-5&periods=1-68&width=0&height=0&template=SWSCUST2+module+textspreadsheet) for room details.
- -->
+See [skema.ku.dk](https://skema.ku.dk/tt/tt.asp?SDB=KU2324&language=DK&folder=Reporting&style=textspreadsheet&type=module&idtype=id&id=118371&weeks=6-16&days=1-5&periods=1-68&width=0&height=0&template=SWSCUST2+module+textspreadsheet) for room details.
 
-
-### Exercise classes
-Held Monday 15-17 and Wednesday 13-15.
 
 #### Block 1
 
- * Class 1: Iben
-   * Monday: Biocenter, Lundbeck Auditoriet
+ * Class 1: 
+   * Monday: NBB 2.1.H.14
+   * Wednesday: HCØ A101
+ * Class 2: 
+   * Monday: NBB 2.1.I.156
+   * Wednesday: HCØ A102
+ * Class 3: 
+   * Monday: NBB 2.0.G.064/070
    * Wednesday: HCØ A105
- * Class 2: Johan
-   * Monday: Biocenter, Lundbeck Auditoriet
+ * Class 4: 
+   * Monday: NBB 2.0.G.064/070
    * Wednesday: HCØ A106
- * Class 3: Julian
-   * Monday: HCØ Aud 03
-   * Wednesday: HCØ C103
- * Class 4: Kjartan
-   * Monday: HCØ Aud 03
-   * Wednesday: HCØ A112
- * Class 5: Asbjørn
-   * Monday: NEXS Auditorium Syd
-   * Wednesday: NEXS Auditorium Syd
- * Class 6: Christian
-   * Monday: NEXS Auditorium Nord
-   * Wednesday: NEXS Auditorium Nord
+ * Class 5: 
+   * Monday: NBB 2.2.H.142
+   * Wednesday: HCØ A107
+ * Class 6: 
+   * Monday: NBB 2.2.I.158
+   * Wednesday: HCØ A111
+ * Class 7: 
+   * Monday: NBB 2.3.I.164
+   * Wednesday: HCØ C103 (NB!) 
 
+*NB! C103 is __not__ A103, but on the first floor in Building 2.*
 
- * Class Schema B: Jóhann
-   * Tuesday 13-15: DIKU 1-0-37 
-   * Friday 10-12: Biocenter 2-0-07/09  
+<!-- 
 
 #### Block 2
 
- * Class 1: Iben
-   * Monday: HCØ A101
-   * Wednesday: HCØ A101
- * Class 2: Johan
-   * Monday: HCØ A102
-   * Wednesday: HCØ A102
- * Class 3: Julian
-   * Monday: HCØ A103
-   * Wednesday: HCØ A103
- * Class 4: Kjartan
-   * Monday: HCØ A104
-   * Wednesday: HCØ A104
- * Class 5: Asbjørn
-   * Monday: HCØ A105
-   * Wednesday: HCØ A105
- * Class 6: Johann
-   * Monday: HCØ A106
-   * Wednesday: HCØ A106
+ * Class 1: 
+   * Monday: 
+   * Wednesday: 
+ * Class 2: 
+   * Monday: 
+   * Wednesday: 
+ * Class 3: 
+   * Monday: 
+   * Wednesday: 
+ * Class 4: 
+   * Monday: 
+   * Wednesday: 
+ * Class 5: 
+   * Monday: 
+   * Wednesday: 
+ * Class 6: 
+   * Monday: 
+   * Wednesday: 
+ * Class 7: 
+   * Monday: 
+   * Wednesday: 
 
- * Class Schema B: Christian
-   * Tuesday 13-15: DIKU 1-0-04
-   * Friday 10-12: Changes weekly. Check: https://skema.ku.dk/tt/tt.asp?SDB=KU2223&language=DK&folder=Reporting&style=textspreadsheet&type=module&idtype=id&id=111921&weeks=17-27&days=5&periods=1-68&width=0&height=0&template=SWSCUST2+module+textspreadsheet
-
+ -->
 
 ### Room details
 Map of Nørre Campus:
@@ -170,11 +163,13 @@ https://nexs.ku.dk/kontakt/findvej/kort_norre-campus/
  * Biocenter, Ole Maaløes Vej 5, https://www.biocenter.ku.dk/kort/
  * DIKU, No further explanation needed
  * NBB, Niels Bohr Building, Jagtvej 155 (other side of Jagtvej)
- * HCØ C103 is first floor in B building
+ * HCØ, C103 is first floor in building 2
  * NEXS Aud Syd + Nord is at Nørre Alle 51 (almost at the Royal Library)
 
 
-## Cafées
+## Cafées (expected times)
+Cafées will be manned with either 2 or 3 TAs. 
+
  * Wednesdays 15:15-17:00
    * This sessions have a café structure and are dedicated to help with assignments and other open questions.
  * Fridays 14:15-16:00
@@ -183,60 +178,40 @@ https://nexs.ku.dk/kontakt/findvej/kort_norre-campus/
 ### Rooms
 
 Wednesday: 
-  * HCØ A101
-  * HCØ A102
-  * HCØ A103 -- Only in weeks with assignment deadlines
+  * 
+  * 
 
 Friday: 
-  * HCØ A103
-  * HCØ A104
-  * HCØ A105 -- Only in weeks with assignment deadlines
+  * 
+  * 
+  *  -- Only in weeks with assignment deadlines
 
-
-
-<!-- #### Block 1
-
-Wednesday: 
- * NBB 01.1.H.142
- * NBB 01.1.I.156
- * NBB 01.2.H.142
- * NBB 01.2.I.158
-
-Friday:
- * A104
- * A110 
- * A111
- * C103 (only if others are full)
-
-No cafés in week 45.
- -->
 
 ## Study group formation
-The CompSys instructors can help you find a find a study group, if you are missing one. A study group formation will be held on 8/9 at 12.00. Watch absalon for an announcement with details on the process. 
-The instructors can also be the link to the study administration; if there is something you are in doubt about and feel better to ask a fellow student, they are available.
+
 
 
 ## Assignment (The following can change slightly...)
 
-There are 7-8 assignment in total during the course with deadline roughly every second week with the following deadlines.
+There are 7 assignment in total during the course with deadline roughly every second week with the following deadlines.
 
 
 | Topic                             | Expected deadline   |
 | --------------------------------- | ------------------- |
-| A0: Quicksort in RISC-V assembly  | 25 Sep @ 16:00      |
-| A1: Dynamic memory and caching    | 09 Oct @ 16:00      |
-| A2: Concurrency                   | 30 Oct @ 16:00      |
-| A3: Client network distribution   | 20 Nov @ 16:00      |
-| A4: P2P networking and security   | 05 Dec @ 16:00      |
-| A5: Simple architecture.          | 18 Dec @ 16:00      |
-| A6: Pipelined architecture        | 08 Jan @ 16:00      |
+| A0: File(1) - C introduction      | 24 Sep @ 16:00      |
+| A1: Dynamic memory and caching    | 08 Oct @ 16:00      |
+| A2: Concurrency                   | 29 Oct @ 16:00      |
+| A3: Client network distribution   | 19 Nov @ 16:00      |
+| A4: P2P networking and security   | 04 Dec @ 16:00      |
+| A5: Simple architecture.          | 17 Dec @ 16:00      |
+| A6: Pipelined architecture        | 07 Jan @ 16:00      |
 
  The assignments will be graded with points from 0 to 4 and it is not possible to re-hand-in any of the assignments.
 
 Assignments are made to be solved in groups of preferably three students, but groups of two active students will also do. We strongly encourage not to work alone. Groups cannot be larger than three students. Each group must make their own solutions and must share implementations and report with other. You are allowed to discuss material and ideas.
 
 ### Feedback
-Feedback to assignments will be given by TAs on the course. It will be given written and can be expected about two weeks after the hand-in. Feedback will focus on what could be approved in the assignment relating to both technical implementations, and report structure and material. The feedback may thus be useful for later assignment. Feedback will not give a direct justification of the evaluation in number of points.
+Feedback to assignments will be given by TAs on the course; we try to match with the . Feedback will focus on what could be approved in the assignment relating to both technical implementations, and report structure and material. The feedback may thus be useful for later assignment. The feedbeck will not be complete, so it can be useful also to talk with your TA at the exercises. Feedback will not give a direct justification of the evaluation in number of points.
 
 We expect the correction of submissions to take about as long as a the submission (either one or two weeks).
 
