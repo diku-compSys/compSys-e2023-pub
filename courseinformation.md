@@ -206,7 +206,7 @@ There are 7 assignment in total during the course with deadline roughly every se
 | A5: Simple architecture.          | 17 Dec @ 16:00      |
 | A6: Pipelined architecture        | 07 Jan @ 16:00      |
 
- The assignments will be graded with points from 0 to 4 and it is not possible to re-hand-in any of the assignments.
+The assignments will be graded with points from 0 to 4 and it is not possible to re-hand-in any of the assignments.
 
 Assignments are made to be solved in groups of preferably three students, but groups of two active students will also do. We strongly encourage not to work alone. Groups cannot be larger than three students. Each group must make their own solutions and must share implementations and report with other. You are allowed to discuss material and ideas.
 
