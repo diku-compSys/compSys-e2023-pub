@@ -211,7 +211,7 @@ The assignments will be graded with points from 0 to 4 and it is not possible to
 Assignments are made to be solved in groups of preferably three students, but groups of two active students will also do. We strongly encourage not to work alone. Groups cannot be larger than three students. Each group must make their own solutions and must share implementations and report with other. You are allowed to discuss material and ideas.
 
 ### Feedback
-Feedback to assignments will be given by TAs on the course; we try to match with the . Feedback will focus on what could be approved in the assignment relating to both technical implementations, and report structure and material. The feedback may thus be useful for later assignment. The feedbeck will not be complete, so it can be useful also to talk with your TA at the exercises. Feedback will not give a direct justification of the evaluation in number of points.
+Feedback to assignments will be given by TAs on the course; we try to match with the TA of the exercise class. Feedback will focus on what could be approved in the assignment relating to both technical implementations, and report structure and material. The feedback may thus be useful for later assignment. The feedbeck will not be complete, so it can be useful also to talk with your TA at the exercises. Feedback will not give a direct justification of the evaluation in number of points.
 
 We expect the correction of submissions to take about as long as a the submission (either one or two weeks).
 
