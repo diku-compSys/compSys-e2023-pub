@@ -104,29 +104,29 @@ See [skema.ku.dk](https://skema.ku.dk/tt/tt.asp?SDB=KU2324&language=DK&folder=Re
 
 #### Block 1
 
- * Class 1: 
+ * Class 1: Axel
    * Monday: NBB 2.1.H.14
    * Wednesday: HCØ A101
- * Class 2: 
+ * Class 2: Christian
    * Monday: NBB 2.1.I.156
    * Wednesday: HCØ A102
- * Class 3: 
+ * Class 3: Jakob
    * Monday: NBB 2.0.G.064/070
    * Wednesday: HCØ A105
- * Class 4: 
+ * Class 4: Utne
    * Monday: NBB 2.0.G.064/070
    * Wednesday: HCØ A106
- * Class 5: 
+ * Class 5: Kjartan
    * Monday: NBB 2.2.H.142
    * Wednesday: HCØ A107
- * Class 6: 
+ * Class 6: Lars
    * Monday: NBB 2.2.I.158
    * Wednesday: HCØ A111
- * Class 7: 
+ * Class 7: Lucas
    * Monday: NBB 2.3.I.164
    * Wednesday: HCØ C103 (NB!) 
 
-*NB! C103 is __not__ A103, but on the first floor in Building 2.*
+*NB! C103 is __not__ A103, but on the first floor in Building 2 (also formerly known as Building C).*
 
 <!-- 
 
