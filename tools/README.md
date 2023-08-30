@@ -28,6 +28,6 @@ For some purposes we have also designed some specific scripts you can run from y
  -->
 
 ## Editor vs. IDE
-We do not ask you to use any specific editor or IDE for the course. I can say that different teachers usage range from VIM over Emacs to Sublime Text. Most important is that you have easy access from your editor to a terminal where you can run the Make build tool and scripts for testing. See the [Preparation](../preparations/README.md) for further details.
+We do not ask you to use any specific editor or IDE for the course. I can say that different teachers usage range from VIM over Emacs to Sublime Text. Most important is that you have easy access from your editor to a terminal where you can run the Make build tool and scripts for testing.
 
 
