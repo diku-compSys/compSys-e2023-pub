@@ -8,7 +8,7 @@ We will also later during the course use a simulation tool that might (or might 
 Most of you should not have a problem with running needed software on your local machine, so see OS specific pages for rolling out your toolchain.
 
   * [Linux tools](linux.md)
-  * [maxOS tools](macos.md)
+  * [macOS tools](macos.md)
   * [Windows tools](windows.md)
 
 ## RARS
