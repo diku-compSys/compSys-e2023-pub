@@ -23,7 +23,7 @@ If the above does not work, or you still want to link `gcc` to the newly install
 sudo ln -s $(which gcc-13) /usr/local/bin/gcc
 ```
 Restart your terminal.
-Running `gcc --version`should now pring gcc and not clang.
+Running `gcc --version` should now print gcc and not clang.
 
 First time Homebrew will install many needed programs (including compiling them for you system), so it can take a long time.
 
