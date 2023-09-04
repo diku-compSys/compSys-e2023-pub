@@ -177,13 +177,13 @@ Cafées will be manned with either 2 or 3 TAs.
 ### Rooms
 
 Wednesday: 
-  * 
-  * 
+  * Kanapsalen, NEXS, Nørre Alle 53
+  * Auditorium Syd, NEXS, Nørre Alle 51 -- Only in weeks with assignment deadlines.
 
 Friday: 
-  * 
-  * 
-  *  -- Only in weeks with assignment deadlines
+  * DIKU?
+  * DIKU?
+  * DIKU? -- Only in weeks with assignment deadlines
 
 
 ## Study group formation
