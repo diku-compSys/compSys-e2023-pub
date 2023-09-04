@@ -105,7 +105,7 @@ See [skema.ku.dk](https://skema.ku.dk/tt/tt.asp?SDB=KU2324&language=DK&folder=Re
 #### Block 1
 
  * Class 1: Axel
-   * Monday: NBB 2.1.H.14
+   * Monday: NBB 2.1.H.142
    * Wednesday: HCØ A101
  * Class 2: Christian
    * Monday: NBB 2.1.I.156
