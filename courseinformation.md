@@ -52,7 +52,7 @@ The general outline of CompSys will be the following:
 Be aware that CompSys is a semester course, which means that we will be teaching (including having normal exercise and assignments) throughout the exam period (weeks 44 and 45) of Block 1.
 
 ### Exam
-The exam is a written 4-hour open-book exam and will be held on Wednesday Jan 25. Course syllabus is all reading material, including the assignments.
+The exam is a written 4-hour open-book exam and will be held on Wednesday Jan 24. Course syllabus is all reading material, including the assignments.
 We will later publish example sets based on the previous exam iteration and further details on the exam procedure. It will be possible to get limited feedback on the exam performance afterwards.
 
 ### Exercises and Cafées
@@ -177,13 +177,13 @@ Cafées will be manned with either 2 or 3 TAs.
 ### Rooms
 
 Wednesday: 
-  * 
-  * 
+  * Kanapsalen, NEXS, Nørre Alle 53
+  * Auditorium Syd, NEXS, Nørre Alle 51 -- Only in weeks with assignment deadlines.
 
 Friday: 
-  * 
-  * 
-  *  -- Only in weeks with assignment deadlines
+  * DIKU?
+  * DIKU?
+  * DIKU? -- Only in weeks with assignment deadlines
 
 
 ## Study group formation
