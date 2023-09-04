@@ -5,6 +5,7 @@
 | 36   | 04 Sep | Intro | Michael  | Course introduction                                                           | COD 1.1-1.4,1.6-1.8 |
 |      |        | Basic | David    | Computers and C programming                                                   | JG 1-3 |
 |      | 06 Sep | Basic | David    | Assembly code and machine model                                               | COD 2.1-2.4,2.6-2.7, JG 4 |
+|      |        |       | TAs      | Master Class on Tools for the Working Programmer @ 15:15                      |  |
 | 37   | 11 Sep | Basic | David    | Functions and text                                                            | COD 2.8-2.9, JG 5-7 |
 |      | 13 Sep | Basic | David    | Computer arithmetic                                                           | COD 3.1-3.3, 3.5 |
 | 38   | 18 Sep | Basic | David    | C Programming - pointers and memory                                           | JG 8-9, 11 |
