@@ -1,6 +1,6 @@
 CFLAGS=-Wall -Wextra -pedantic -std=c11
 
-all: helloworld error args sum roll
+all: helloworld error args sum roll side_one side_two
 
 helloworld: helloworld.c
 	gcc helloworld.c -o helloworld $(CFLAGS)
@@ -17,5 +17,11 @@ sum: sum.c
 roll: roll.c
 	gcc roll.c -o roll $(CFLAGS)
 
+side_one: side_one.c
+	gcc side_one.c -o side_one $(CFLAGS)
+
+side_two: side_two.c
+	gcc side_two.c -o side_two $(CFLAGS)
+
 clean:
-	rm -f helloworld error args sum roll
+	rm -f helloworld error args sum roll side_one side_two
