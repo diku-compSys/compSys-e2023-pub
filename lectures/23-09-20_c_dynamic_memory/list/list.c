@@ -10,7 +10,7 @@ struct list {
   struct list_node *head;
 };
 
-struct list* list_create() {
+struct list* list_create(void) {
   struct list *list = malloc(sizeof(struct list));
   list->head = NULL;
   return list;

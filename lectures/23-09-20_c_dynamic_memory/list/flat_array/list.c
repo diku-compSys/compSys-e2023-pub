@@ -8,7 +8,7 @@ struct list {
 };
 
 
-struct list *list_create() {
+struct list *list_create(void) {
   struct list *list = malloc(sizeof(struct list));
 
   list->length = 0;

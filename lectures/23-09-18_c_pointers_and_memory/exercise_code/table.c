@@ -6,7 +6,7 @@
 
 int updateElement (int* table, int row, int col, int value);
 
-int main() {
+int main(void) {
   int table[HEIGHT][WIDTH];
 
   for (int h = 0 ; h < HEIGHT ; h++) {

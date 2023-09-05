@@ -19,7 +19,7 @@ int stack_push(struct stack *s, int x) {
   return 0;
 }
 
-int main() {
+int main(void) {
   struct stack s;
   stack_init(&s);
   assert(stack_push(&s, 100) == 0);

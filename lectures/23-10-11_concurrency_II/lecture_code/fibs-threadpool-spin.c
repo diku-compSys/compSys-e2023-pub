@@ -46,7 +46,7 @@ void* worker(void* arg) {
   return NULL;
 }
 
-int main() {
+int main(void) {
   char *my_line = NULL;
   ssize_t line_len;
   size_t buf_len = 0;

@@ -10,7 +10,7 @@ int fib (int n) {
   }
 }
 
-int main() {
+int main(void) {
   char *line = NULL;
   ssize_t line_len;
   size_t buf_len = 0;

@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-int main() {
+int main(void) {
   int x = 2;
   int y = 3;
   printf("x: %d\n", x);

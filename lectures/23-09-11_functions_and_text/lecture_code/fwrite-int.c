@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-int main() {
+int main(void) {
   FILE *f = fopen("output", "w");
   int x = 1337;            // Number to write;
   char s[10];              // Output buffer.

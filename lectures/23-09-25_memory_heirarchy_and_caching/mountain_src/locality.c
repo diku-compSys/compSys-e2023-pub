@@ -36,7 +36,7 @@ double test_time(int limit, int stride) {
   // TODO
 }
 
-int main() {
+int main(void) {
   // Initialise the data so that an eager C compiler will not be able
   // to figure out that we are adding together zeroes.
   for (int i = 0; i < MAXELEMS; i++) {

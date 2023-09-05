@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <sys/wait.h>
 
-int main () {
+int main (void) {
   printf("1\n");
   pid_t pid = fork();
   if (pid == 0) {

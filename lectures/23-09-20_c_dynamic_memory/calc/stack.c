@@ -2,7 +2,7 @@
 #include <assert.h>
 #include "stack.h"
 
-struct stack* stack_new() {
+struct stack* stack_new(void) {
   assert(0);
 }
 

@@ -1,5 +1,5 @@
 // Common usage() prints out stuff for command-line help
-void usage() {
+void usage(void) {
     fprintf(stderr, "usage: \n");
     fprintf(stderr, "  -l <number of items each producer produces>\n");
     fprintf(stderr, "  -m <size of the shared producer/consumer buffer>\n");

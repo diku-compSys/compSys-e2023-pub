@@ -25,7 +25,7 @@ void do_fill(int value) {
     num_full++;
 }
 
-int do_get() {
+int do_get(void) {
     int tmp = buffer[use_ptr];
     ensure(tmp != EMPTY, "error: tried to get an empty buffer");
     buffer[use_ptr] = EMPTY;

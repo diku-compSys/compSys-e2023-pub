@@ -1,7 +1,7 @@
 #include <stdio.h>
 
 // Note this is not something to copy
-int main() {
+int main(void) {
   int a = 3;
   int b = 5;
   int c = -2;

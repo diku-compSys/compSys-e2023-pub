@@ -13,5 +13,5 @@ void sumrows(int n, int m,
   }
 }
 
-int main() {
+int main(void) {
 }

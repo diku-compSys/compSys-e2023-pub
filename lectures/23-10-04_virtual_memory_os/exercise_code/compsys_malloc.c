@@ -21,7 +21,7 @@ free_block_t *free_list;
 
 /* Initialise the heap - compsys_malloc() et al won't work unless this
    is called first. */
-void compsys_heap_init()
+void compsys_heap_init(void)
 {
   free_list = (free_block_t*) heap;
   free_list->size = HEAP_SIZE;

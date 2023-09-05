@@ -28,7 +28,7 @@ int consumer_pause_times[MAX_THREADS][7];
 // needed to avoid interleaving of print out from threads
 pthread_mutex_t print_lock = PTHREAD_MUTEX_INITIALIZER;
 
-void do_print_headers() {
+void do_print_headers(void) {
     if (do_trace == 0) 
 	return;
     int i;
@@ -57,7 +57,7 @@ void do_print_pointers(int index) {
     }
 }
 
-void do_print_buffer() {
+void do_print_buffer(void) {
     int i;
     printf("%3d [", num_full);
     for (i = 0; i < max; i++) {
@@ -73,7 +73,7 @@ void do_print_buffer() {
     printf("] ");
 }
 
-void do_eos() {
+void do_eos(void) {
     if (do_trace) {
 	Mutex_lock(&print_lock);
 	do_print_buffer();

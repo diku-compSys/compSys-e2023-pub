@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-int main() {
+int main(void) {
   printf("Hello, world!\n");
   int x = 123;
   printf("an integer: %d\n", x);

@@ -3,7 +3,7 @@
 
 struct stack;
 
-struct stack* stack_new();
+struct stack* stack_new(void);
 
 void stack_free(struct stack*);
 

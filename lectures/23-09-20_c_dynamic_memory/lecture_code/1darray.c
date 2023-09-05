@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-int main() {
+int main(void) {
   int size = 10;
   int *arr = malloc(size * sizeof(int));
 

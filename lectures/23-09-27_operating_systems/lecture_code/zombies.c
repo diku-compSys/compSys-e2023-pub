@@ -1,7 +1,7 @@
 #include <unistd.h>
 #include <stdio.h>
 
-int main() {
+int main(void) {
   int num_children = 10;
 
   for (int i = 0; i < num_children; i++) {

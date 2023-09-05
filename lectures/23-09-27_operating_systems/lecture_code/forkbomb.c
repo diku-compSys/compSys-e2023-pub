@@ -2,6 +2,6 @@
 
 #include <unistd.h>
 
-int main() {
+int main(void) {
   while (1) { fork(); }
 }

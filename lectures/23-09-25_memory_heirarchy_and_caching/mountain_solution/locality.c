@@ -6,7 +6,7 @@
 
 // Get the number of (fractional) seconds since 1st of January, 1970 -
 // the "Unix epoch".
-double seconds() {
+double seconds(void) {
   struct timeval tv;
   gettimeofday(&tv, NULL); // The null is for timezone information.
   return tv.tv_sec + tv.tv_usec/1000000.0;
@@ -57,7 +57,7 @@ double test_time(int limit, int stride) {
   return MiB/elapsed;
 }
 
-int main() {
+int main(void) {
   // Initialise the data so that an eager C compiler will not be able
   // to figure out that we are adding together zeroes.
   for (int i = 0; i < MAXELEMS; i++) {

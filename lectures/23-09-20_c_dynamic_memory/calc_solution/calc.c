@@ -4,7 +4,7 @@
 
 typedef double (*binop)(double,double);
 
-static void out_of_memory() {
+static void out_of_memory(void) {
   printf("Out of memory.\n");
   exit(EXIT_FAILURE);
 }

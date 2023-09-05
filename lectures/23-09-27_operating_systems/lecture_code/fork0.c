@@ -1,7 +1,8 @@
 #include <unistd.h>
 #include <stdio.h>
+#include <sys/types.h>
 
-int main() {
+int main(void) {
   pid_t ret = fork();
 
   if (ret == 0) {

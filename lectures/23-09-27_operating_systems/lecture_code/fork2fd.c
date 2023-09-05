@@ -6,7 +6,7 @@
 #include <assert.h>
 #include <fcntl.h>
 
-int main() {
+int main(void) {
   int fd = open("file", O_RDONLY);
   assert(fd >= 0);
 

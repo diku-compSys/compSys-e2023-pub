@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-int main() {
+int main(void) {
   // Open for writing ("w")
   FILE *f = fopen("output", "w");
 

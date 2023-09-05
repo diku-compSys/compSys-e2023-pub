@@ -22,7 +22,7 @@ int file_pipe(FILE* files[2]) {
   }
 }
 
-int main() {
+int main(void) {
   FILE* files[2];
   assert(file_pipe(files) == 0);
   FILE *read_end = files[0];

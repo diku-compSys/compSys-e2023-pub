@@ -5,7 +5,7 @@
 #include <sys/wait.h>
 #include <assert.h>
 
-int main() {
+int main(void) {
   FILE *f = fopen("file", "r");
   assert(f != NULL);
 

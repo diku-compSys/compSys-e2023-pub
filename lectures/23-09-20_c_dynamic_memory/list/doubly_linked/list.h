@@ -4,7 +4,7 @@
 struct list;
 
 // Create new list.  Initially empty.  NULL on error.
-struct list* list_create();
+struct list* list_create(void);
 
 // Deallocates list.
 void list_free(struct list*);

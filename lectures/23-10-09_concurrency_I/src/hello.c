@@ -8,7 +8,7 @@ void* thread(void *arg) {
   return NULL;
 }
 
-int main() {
+int main(void) {
   int x = 42;
   pthread_t tid;
   assert(pthread_create(&tid, NULL, thread, &x) == 0);

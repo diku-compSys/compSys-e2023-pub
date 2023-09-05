@@ -24,7 +24,7 @@ void inc_list(struct list *l, int K) {
   list_map(l, inc_elem, &K);
 }
 
-int main() {
+int main(void) {
   int K = 42;
 
   int x = 1, y = 2, z = 3;

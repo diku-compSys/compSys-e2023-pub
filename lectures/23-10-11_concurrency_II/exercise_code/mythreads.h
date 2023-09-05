@@ -12,7 +12,7 @@ void *Malloc(size_t size) {
     return p;
 }
 
-double Time_GetSeconds() {
+double Time_GetSeconds(void) {
     struct timeval t;
     int rc = gettimeofday(&t, NULL);
     assert(rc == 0);
@@ -21,8 +21,7 @@ double Time_GetSeconds() {
 
 void work(int seconds) {
     double t0 = Time_GetSeconds();
-    while ((Time_GetSeconds() - t0) < (double)seconds)
-	;
+    while ((Time_GetSeconds() - t0) < (double)seconds);
 }
 
 void Mutex_init(pthread_mutex_t *m) {

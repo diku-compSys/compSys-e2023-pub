@@ -12,7 +12,7 @@ struct stack {
   struct node *top;
 };
 
-struct stack* stack_new() {
+struct stack* stack_new(void) {
   struct stack* stack = malloc(sizeof(struct stack));
   stack->top = NULL;
   return stack;
