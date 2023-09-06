@@ -107,8 +107,9 @@ clean:
 # vscode extensions
 - Go to extensions on the left (Ctrl+Shift+X)
 - Get the C -extensions by microsoft is a good starting point
-- PDF viewer
-- Markdown previewer (Ctrl+Shift+V)
+- PDF viewer  (vscode-pdf)
+- Markdown previewer (Ctrl+Shift+V) (markdown all in one)
+- Git (github pull requests and issues)
 
 # godbolt
 Example: 
