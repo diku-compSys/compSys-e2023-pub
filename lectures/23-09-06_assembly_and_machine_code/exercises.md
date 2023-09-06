@@ -11,7 +11,7 @@ You can use one of the following RISC-V interpreters:
 and supports a bigger memory, but has a more complicated interface.
 [See this guide on using RARS](../../tools/rars.md).
 
-You will need to use RARS for the first mandatory assignment, but
+RARS can give a better understanding of assembly and can be useful later in the course, but
 today's exercises can be solved with the web-based interpreter.  Note
 that the web-based interpreter supports only the following
 instructions: ADD, ADDI, SUB, AND,ANDI, OR, ORI, XOR, XORI, SLT, SLTI,
