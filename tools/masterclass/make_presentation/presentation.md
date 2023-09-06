@@ -68,6 +68,8 @@ clean:
 
 <span style="color:red;">EXECISE:</span> make valgrind for this cmd ```valgrind --tool=memcheck --leak-check=yes ./hello``. Furthermore, make it easy to change valgrind flags and executable name (currently hello).
 
+leaks (macos) memory 
+valgrind 
 
 ```
 # executes clean cmd no matter what 
@@ -115,7 +117,7 @@ Example:
 # Risc-V
 To compile to exec risc-v, with the library provided.
 ~~~
-riscv32-unknown-elf-gcc -march=rv32im -mabi=ilp32 -O1 test.c lib.c -static -nostartfiles -nostdlib -o test.riscv
+riscv32-unknown-elf-gcc -march=rv32im -mabi=ilp32 -O1 hello.c lib.c -static -nostartfiles -nostdlib -o test.riscv
 ~~~
 
 Readable risc-v code.
