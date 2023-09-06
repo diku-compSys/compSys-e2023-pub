@@ -250,14 +250,18 @@ while (i >= 0) {
 <summary>Open this to see the answer</summary>
 
 ```
-LOOP0:  beq x7, x5, DONE0
-        addi x29, x0, 0
-LOOP1:  beq x29, x6, DONE1
+
+LOOP0:  
+beq x7, x5, DONE0
+        addi x29, x0, 0 # j
+LOOP1:  
+beq x29, x6, DONE1
         slli x30, x29, 2
         slli x30, x30, 2
         add x30, x10, x30
-        add x31, x7, x29,
-        sw x31 0(x30)
+        add x31, x7, x29
+        sw x31, 0(x30) 
+#change this to x30
         addi x29, x29, 1
         jal x0, LOOP1
 DONE1:
@@ -269,11 +273,12 @@ DONE0:
 We can run it in RARS by adding more code before the outer loop:
 
 ```
-        addi x5, x0, 4
-        addi x6, x0, 3
-        addi x7, x0, 0
-        addi sp, sp, -48
-        addi x10, sp, 0
+addi x5, x0, 5 # a
+addi x6, x0, 3 # b  , j < b inner
+addi x7, x0, 0 # i  , i < a outer
+#addi sp, sp, -48
+addi x10, sp, 0
+
 ```
 
 This initialises the registers (`a=4`, `b=3`).  The array `D` is
