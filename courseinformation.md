@@ -181,9 +181,10 @@ Wednesday:
   * Auditorium Syd, NEXS, Nørre Alle 51 -- Only in weeks with assignment deadlines.
 
 Friday: 
-  * DIKU?
-  * DIKU?
-  * DIKU? -- Only in weeks with assignment deadlines
+  * DIKU 1-0-10
+  * DIKU 1-0-14
+  * DIKU 1-0-18 -- Overflow room in weeks without assignment deadlines.
+  * DIKU 1-0-22 -- Overflow room
 
 
 ## Study group formation
