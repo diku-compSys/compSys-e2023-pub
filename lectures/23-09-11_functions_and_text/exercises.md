@@ -3,7 +3,7 @@
 ## RISC-V
 
 The following exercises will train you in writing more
-complicated RISC-V programs.  They are intended as preparation for A0.
+complicated RISC-V programs. 
 You will be given pseudocode or C programs, and asked to write similar
 programs in RISC-V assembly.
 
