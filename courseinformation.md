@@ -188,7 +188,7 @@ Friday:
 
 
 ## Study group formation
-
+Online on Absalon or Discord.
 
 
 ## Assignment (The following can change slightly...)
