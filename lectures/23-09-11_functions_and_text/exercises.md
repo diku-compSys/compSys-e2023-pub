@@ -64,7 +64,7 @@ function `memmem`:
 ```C
 unsigned char* memfind(unsigned char *haystack, int haystacklen,
                        unsigned char *needle, int needlelen) {
-  for (int i = 0; i < haystacklen-needlelen; i++) {
+  for (int i = 0; i <= haystacklen-needlelen; i++) {
     if (memeq(haystack+i,needle,needlelen)) {
       return haystack+i;
     }
