@@ -66,7 +66,7 @@ Lexicographically, the ordering is `y < x`.  If these bit sequences
 are interpreted as 8-bit unsigned integers, this means `0 < 255`,
 which matches the usual ordering.  However, if these sequences are
 interpreted as 8-bit *signed* integers in two's complement,
-lexicographic ordering gives us `0 < -128`, which is likely not
+lexicographic ordering gives us `0 < -1`, which is likely not
 desirable.
 
 Now consider and answer the following:
