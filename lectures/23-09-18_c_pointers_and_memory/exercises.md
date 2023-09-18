@@ -42,6 +42,8 @@ variable `x` is 0.
     *(arr[1]) = _____;
     *(arr[0]) = *(arr[0]) - 1;
 
+    - give a qualified guess for the type declaration of arr
+
 # Practical Exercises
 
 Author: Troels Henriksen <athas@sigkill.dk>
