@@ -9,16 +9,10 @@ int main(void) {
   printf("&y: %p\n", (void*)&y);
 
   int* px;
-  int* py;
+  int *py;
 
   px = &x;
   py = &y;
-
-  // x x x x
-  // y y y y
-  // px px px px px px px px
-  // py py py py py py py py
-
 
   // x has type T
   // &x has type T*
