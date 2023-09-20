@@ -202,7 +202,7 @@ There are 7 assignment in total during the course with deadline roughly every se
 | A1: Dynamic memory and caching    | 08 Oct @ 16:00      |
 | A2: Concurrency                   | 29 Oct @ 16:00      |
 | A3: Client network distribution   | 19 Nov @ 16:00      |
-| A4: P2P networking and security   | 04 Dec @ 16:00      |
+| A4: P2P networking and security   | 03 Dec @ 16:00      |
 | A5: Simple architecture.          | 17 Dec @ 16:00      |
 | A6: Pipelined architecture        | 07 Jan @ 16:00      |
 

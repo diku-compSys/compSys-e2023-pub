@@ -22,7 +22,9 @@ int stack_push(struct stack *s, int x) {
 int main(void) {
   struct stack s;
   stack_init(&s);
+  printf("Initial top: %d\n", s.top);
   assert(stack_push(&s, 100) == 0);
   assert(stack_push(&s, 200) == 0);
   assert(stack_push(&s, 300) == 0);
+  printf("Final top: %d\n", s.top);
 }
