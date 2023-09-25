@@ -34,3 +34,14 @@ should use LLDB (`lldb`), which has equivalent functionality for our
 purposes, and almost the same commands.  [See this GDB to LLDB command
 map](https://lldb.llvm.org/use/map.html), and note that you likely
 need only a small fraction of these commands for CompSys.
+
+## Alternative to valgrind
+If you are on an M1 or M2 mac, you cannot run the tool valgrind, that we will use in this course to check for memory leaks. However you can use the macOS alternative called leaks. 
+
+To get started compile you program with the debug flag `-g`. Next use the following command to use leaks on the program:
+  ```
+  leaks --atExit --list -- ./foo arg1
+  ```
+Here we call leaks on the program `foo` that has been given the argument `arg1`.
+
+Check out this tutorial [valgrind turotial](https://www.youtube.com/watch?v=bhhDRm926qA&t=139s) or the man page with `man leaks` if you want to know more.
