@@ -14,9 +14,13 @@ int main(int argc, char** argv) {
   unsigned char *p = malloc(to_alloc);
   assert(p != NULL);
 
+  printf("initialising\n");
+
   for (size_t i = 0; i < to_alloc; i++) {
     p[i] = rand();
   }
+
+  printf("spinning\n");
 
   for (int i = 0; i < num_procs; i++) {
     if (fork() == 0) {

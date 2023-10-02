@@ -12,6 +12,8 @@ int main(int argc, char** argv) {
   unsigned char *p = malloc(to_alloc);
   assert(p != NULL);
 
+  printf("spinning\n");
+
   if (p) {
     while (1) ;
   }

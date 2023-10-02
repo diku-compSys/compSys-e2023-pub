@@ -11,7 +11,7 @@ int main(void) {
     // Child
     pid_t my_pid = getpid();
     printf("Child: ret=%d; my_pid=%d\n", (int)ret, (int)my_pid);
-    *((int*)NULL) = 0;
+//    *((int*)NULL) = 0;
     exit(42);
   } else {
     // Parent
