@@ -1,10 +1,17 @@
 #include <stdio.h>
 #include <pthread.h>
 
-void* thread(void*);
-
 char **ptr;
 int cnt = 0;
+
+void* thread(void *vargp) {
+  int j = (int)vargp;
+
+  printf("%d: %s (cnt=%d)\n",
+         j, ptr[j], ++cnt);
+  return NULL;
+}
+
 int main() {
   pthread_t tid;
   char *msgs[2] = {
@@ -18,12 +25,4 @@ int main() {
                    thread,
                    (void *)i);
   pthread_exit(NULL);
-}
-
-void* thread(void *vargp) {
-  int j = (int)vargp;
-
-  printf("%d: %s (cnt=%d)\n",
-         j, ptr[j], ++cnt);
-  return NULL;
 }

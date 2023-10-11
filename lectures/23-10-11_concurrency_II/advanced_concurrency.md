@@ -1,14 +1,97 @@
 ---
 title: 'Thread Pools and Synchronisation with Condition Variables'
-author: 'Troels Henriksen'
+author: 'David Marchant and Troels Henriksen'
 patat:
   theme:
     codeBlock: []
     header: [bold]
     emph: [bold]
+
+---
+
+# Concurrency II: Making Stuff Go Fast
+
+---
+
+## Inter-Thread Communication
+
+  * So far we've only really talked about isolated processes and threads.
+
+  * Sharing data introduces a lot of problems with mutexes 
+
+  * We can sidestep these problems with communication channels
+
+  * Most prominent in networking, but we can use them within a machine as well 
+
+---
+
+## Channels
+
+  * Any processes/thread can send a signal to any processes/thread that is listening for that signal
+
+  * This is necessary in processes as they cannot share data, this is the only way for them to do so.
+
+  * This is an alternative to shared data for threads.
+
+---
+
+### Pipes
+
+    int pfd;
+    pipe(pfd);
+
+  * A pipe is unidirectional with a dedicated read and write file descriptors.
+
+---
+
+### Reading and Writing to a Pipe
+
+    write(pfd[1], char* buff, int size);
+    read(pfd[0], char* buff, int size);
+
+  * We can read and write to these in a similar manner to any other file.
+
+  * Can't seek or move around the 'file', but we don't usually need to.
+
+---
+
+## A Pipe Example
+
+    #define MSGLEN 16
+
+    int main(void) {
+      char inbuf[MSGLEN];
+      int p[2], i;
+
+      if (pipe(p) < 0)
+        return 1;
+
+      if (fork() == 0) {
+        write(p[1], "First", MSGLEN);
+        write(p[1], "Second", MSGLEN);
+      } else {
+        for (i = 0; i < 2; i++) {
+          read(p[0], inbuf, MSGLEN);
+          printf("%s\n", inbuf);
+        }
+      }
+    }
+
+---
+
+## Some warnings
+
+  * This approach has a lot of overhead
+
+  * And is very easy to deadlock
+
+  * We will look at it again in more detail when its time for networking
+
 ---
 
 # Let's thread a program!
+
+---
 
 ## The Fibonacci Function
 
@@ -25,6 +108,8 @@ patat:
 
 * Goal: apply fib() to all lines of a file
 
+---
+
 ## The getline() function
 
     ssize_t getline(char **lineptr, size_t *n, FILE *stream);
@@ -37,6 +122,8 @@ patat:
 
 * *We* must free the line when we are done with `getline()`.
 
+---
+
 ## Using getline()
 
     int main() {
@@ -45,18 +132,22 @@ patat:
       size_t buf_len = 0;
 
       while ((line_len = getline(&line, &buf_len, stdin)) != -1) {
-        int n = atoi(line);
-        printf("fib(%d) = %d\n", n, fib(n));
+        int num = atoi(line);
+        printf("fib(%d) = %d\n", num, fib(num));
       }
 
       free(line);
     }
+
+---
 
 ### The atoi() function
 
     int atoi(const char *nptr);
 
 * Returns integer represented by a string.
+
+---
 
 ## Is it fast?
 
@@ -73,12 +164,18 @@ patat:
 
 * Depends.
 
+---
+
 ### Could it be faster?
 
 * Yes - this program uses only a single thread, and my machine has
   eight cores.
 
+---
+
 ## One thread per line
+
+---
 
 ### The thread function
 
@@ -89,6 +186,8 @@ patat:
       free(arg);
       return NULL;
     }
+
+---
 
 ## Changes to main()
 
@@ -107,6 +206,8 @@ patat:
 * Note the `strdup()` - this copies the line to avoid a race
   condition.
 
+---
+
 ## Is it faster?
 
     $ time ./fibs-mt > /dev/null < fibs-huge.input
@@ -114,6 +215,8 @@ patat:
     real	0m3,956s
     user	0m8,354s
     sys		0m0,004s
+
+---
 
 ### Looks good, but...
 
@@ -131,13 +234,19 @@ patat:
 
 * Spawning a thread is *expensive* (relatively).
 
+---
+
 # Thread Pools
+
+---
 
 ## Amortising thread startup cost
 
 * It is often too slow to start a new thread for every piece of work.
 
 * For compute-bound work, we only need one thread per CPU core.
+
+---
 
 ### Solution: thread pools
 
@@ -147,11 +256,15 @@ patat:
 * When a task is submitted, a thread is awoken, performs the task,
   then goes back to waiting for more.
 
+---
+
 ### Complex topic
 
 * How big is the pool?  How flexible?  Do we use thread affinity?
 
 * *We will only lightly touch on these concerns in the following.*
+
+---
 
 ## Creating threads for the pool is easy
 
@@ -166,12 +279,16 @@ patat:
       pthread_create(&threads[i], NULL, worker, NULL);
     }
 
+---
+
 ### But how do we submit work?
 
 * Pipes would not work here, because multiple threads would read from
   the same pipe.
 
 * A line of input is bigger than one byte.
+
+---
 
 ## Global shared variables
 
@@ -183,6 +300,8 @@ patat:
 
     // If 1, threads should shut down.
     volatile int die = 0;
+
+---
 
 ## The thread function
 
@@ -215,6 +334,8 @@ patat:
       return NULL;
     }
 
+---
+
 ## The line-reading loop
 
     while ((line_len = getline(&my_line, &buf_len, stdin)) != -1) {
@@ -231,6 +352,8 @@ patat:
 
     die = 1;
 
+---
+
 ## Synchronisation by busy-waiting
 
 * Worker threads spin in a lock/unlock-loop waiting for `line` to be
@@ -238,6 +361,8 @@ patat:
 
 * The `main()` function spins in a lock/unlock-loop waiting for `line`
   to be NULL.
+
+---
 
 ### This is wasteful!
 
@@ -247,18 +372,28 @@ patat:
 * Similarly, the main thread should signal the worker threads when a
   line becomes available.
 
+---
+
 ### This is where we use condition variables
 
+---
+
 ## Condition variables
+
+---
 
 ### Initialisation
 
     pthread_cond_t line_cond = PTHREAD_COND_INITIALIZER;
 
+---
+
 ### Signaling
 
     int pthread_cond_signal(pthread_cond_t *cond);
     int pthread_cond_broadcast(pthread_cond_t *cond);
+
+---
 
 ### Waiting
 
@@ -273,6 +408,8 @@ patat:
   `pthread_cond_wait()` returns.
 
 * *Spurious wakeups* may occur. ("MESA semantics".)
+
+---
 
 ## Using condition variables in the worker threads
 
@@ -306,6 +443,8 @@ patat:
       return NULL;
     }
 
+---
+
 ## And in the main thread
 
     while ((line_len = getline(&my_line, &buf_len, stdin)) != -1) {
@@ -326,6 +465,8 @@ patat:
 * We still have the while-loop, but now it likely runs for much fewer
   iterations.
 
+---
+
 ## Another alternative: futures
 
 A *future* (sometimes *promise*) is a value that is being computed
@@ -336,6 +477,8 @@ block until it is ready.
 
 * ...but `pthread_join()` is almost this model if you squint a bit.
 
+---
+
 ### Pseudocode for Fibonacci with futures:
 
     def fib(n):
@@ -344,6 +487,8 @@ block until it is ready.
       x = future fib(n-1)
       y = future fib(n-2)
       return x.get() + y.get()
+
+---
 
 ## Why futures?
 

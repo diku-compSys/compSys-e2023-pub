@@ -16,8 +16,8 @@ int main(void) {
   size_t buf_len = 0;
 
   while ((line_len = getline(&line, &buf_len, stdin)) != -1) {
-    int n = atoi(line);
-    printf("fib(%d) = %d\n", n, fib(n));
+    int num = atoi(line);
+    printf("fib(%d) = %d\n", num, fib(num));
   }
 
   free(line);
