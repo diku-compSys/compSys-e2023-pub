@@ -1,8 +1,8 @@
 # Exercises for Introduction to Computer Network
 
-The following exercises relate to Chapter 1 in Kurose and Ross on the topic "Introduction to Computer Networks".
+The following exercises relate to Chapter 1 in Kurose and Ross on the topic "Introduction to Computer Networks". From page 97.
 
-* R13
+* R13 
 * R14
 * P4
 * P13
