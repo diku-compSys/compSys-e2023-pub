@@ -58,7 +58,7 @@ void* echo(void* arg)
           write(*connfd, buf, strlen(buf));
         }
         
-        else if (strcmp(input1, "GET") == 0) { 
+        else if (strcmp(buf, "GET\n") == 0) { 
           printf("Client requested stored variable, but it is not set - blocking.\n");
           pthread_mutex_lock(&mutex);
           while (!set) {
