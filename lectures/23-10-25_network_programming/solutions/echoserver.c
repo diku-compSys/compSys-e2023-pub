@@ -35,10 +35,13 @@ void* echo(void* arg)
         printf("Recieved %d bytes: %s\n", valread, buf);
         
 // TASK 2
-        char input1[MAXLINE];
-        char input2[MAXLINE]; 
+        char input1[MAXLINE] = {0};
+        char input2[MAXLINE] = {0};
         char* retval;
         sscanf(buf, "%s %s\n", input1, input2);
+        // Note that input2 only contains null-bytes 
+        // if sscanf matches only one string (see man sscanf)
+        printf("Received string: %s %s\n", input1, input2);
         if (strcmp(input1, "PUT") == 0) {
           pthread_mutex_lock(&mutex);
           if (set) {
@@ -70,7 +73,6 @@ void* echo(void* arg)
         }
 //TASK 1
         else {
-          printf("%s", buf);
           if (strcmp("ping\n", buf) == 0) {
             buf[1] = 'o'; 
           } else {
