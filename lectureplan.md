@@ -25,7 +25,7 @@
 | 44   | 30 Oct | CN    | David    | Non-Blocking Servers and Introduction to Security                             | BOH 12.1-12.3, KR 8.1, 8.2  |
 |      | 01 Nov | CN    | David    | Network Applications: Application Design, Socket API, HTTP & Content Delivery | KR 2.1, 2.2, 2.3.1, 2.3.2, 2.6.1 - 2.6.3 |
 | 45   | 06 Nov | CN    | David    | Application Layer: DNS + P2P File Distribution, Transport layer: UDP          | KR 2.4, 2.5, 3.1 - 3.3 |
-|      | 08 Nov | CN    | David    | Transport layer: Principles of Reliable Data Transfer + TCP                   | KR 3.1 - 3.7 |
+|      | 10 Nov | CN    | David    | Transport layer: Principles of Reliable Data Transfer + TCP                   | KR 3.1 - 3.7 |
 | 46   |        |       |          | Re-exam week - No lectures                                                    |          |
 |      |        |       |          | Hand-in A3  -- Simple client, performance, buffering                          |          |
 | 47   | 20 Nov | CN    | David    | Server Performance                                                            | BOH 12.5-12.7 (Optional read - BOH 8.5-8.7) |
