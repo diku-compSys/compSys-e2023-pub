@@ -73,10 +73,10 @@ int main()
 
     // Register the signature
     hashdata_t signature;
-    get_signature(password, salt, signature);
+    get_signature(password, salt, &signature);
 
     // Setup the socket and connect. Note hard coded port and host
-    network_socket = compsys_helper_open_clientfd("0.0.0.0", 12345);
+    network_socket = compsys_helper_open_clientfd("0.0.0.0", "12345");
 
     // Send the request
     write(network_socket, signature, SHA256_HASH_SIZE);
