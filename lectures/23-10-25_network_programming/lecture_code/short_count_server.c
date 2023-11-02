@@ -32,13 +32,7 @@ int main(int argc, char **argv)
         exit(EXIT_FAILURE);
     }
 
-    // Setup socket address and flags
-    if (setsockopt(listenfd, SOL_SOCKET,
-                   SO_REUSEADDR | SO_REUSEPORT, &opt,
-                   sizeof(opt))) {
-        perror("setsockopt");
-        exit(EXIT_FAILURE);
-    }
+    // Setup socket address
     listen_address.sin_family = AF_INET;
     listen_address.sin_addr.s_addr = INADDR_ANY;
     listen_address.sin_port = htons(atoi(port));
