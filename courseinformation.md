@@ -85,8 +85,14 @@ TAs:
 
 ## Lectures
 
+### Block 1
  * Mondays at 13:15-15:00 in AKB Aud1
  * Wednesdays at 10:15-12:00 in HCØ Aud1
+
+
+### Block 1
+ * Mondays at 13:15-15:00 in HCØ Aud1
+ * Wednesdays at 10:15-12:00 in AKB Aud1
 
 
 ## Exercise Classes
@@ -97,10 +103,9 @@ Exercises will mainly be with physical help.
  * Wednesdays 13:15-15:00
    * These classes are dedicated to exercises and not making assignments.
 
-<!-- Week 45, no teaching Wednesday, but Friday 10:15 - 12:00 -->
+See [skema.ku.dk](https://skema.ku.dk/tt/tt.asp?SDB=KU2324&language=DK&folder=Reporting&style=textspreadsheet&type=module&idtype=id&id=118371&weeks=6-16&days=1-5&periods=1-68&width=0&height=0&template=SWSCUST2+module+textspreadsheet) for Block 1 room details.
 
-See [skema.ku.dk](https://skema.ku.dk/tt/tt.asp?SDB=KU2324&language=DK&folder=Reporting&style=textspreadsheet&type=module&idtype=id&id=118371&weeks=6-16&days=1-5&periods=1-68&width=0&height=0&template=SWSCUST2+module+textspreadsheet) for room details.
-
+See [skema.ku.dk](https://skema.ku.dk/tt/tt.asp?SDB=KU2324&language=DK&folder=Reporting&style=textspreadsheet&type=module&idtype=id&id=118371&weeks=17-27&days=1-5&periods=1-68&width=0&height=0&template=SWSCUST2+module+textspreadsheet) for Block 2 room details.
 
 #### Block 1
 
@@ -126,34 +131,30 @@ See [skema.ku.dk](https://skema.ku.dk/tt/tt.asp?SDB=KU2324&language=DK&folder=Re
    * Tuesday 15-17: DIKU 3-0-25
    * Friday 10-12: DIKU 1-0-37
 
-
-<!-- 
-
 #### Block 2
 
- * Class 1: 
-   * Monday: 
-   * Wednesday: 
- * Class 2: 
-   * Monday: 
-   * Wednesday: 
- * Class 3: 
-   * Monday: 
-   * Wednesday: 
- * Class 4: 
-   * Monday: 
-   * Wednesday: 
- * Class 5: 
-   * Monday: 
-   * Wednesday: 
- * Class 6: 
-   * Monday: 
-   * Wednesday: 
- * Class 7: 
-   * Monday: 
-   * Wednesday: 
+ * Class 1: Axel
+   * Monday: NBB 2.1.H.142
+   * Wednesday: NBB 2.1.H.142
+ * Class 2: Christian
+   * Monday: NBB 2.1.I.156
+   * Wednesday: NBB 2.1.I.156
+ * Class 3: Jakob
+   * Monday: NBB 2.0.G.064/070
+   * Wednesday: NBB 2.0.G.064/070
+ * Class 4: Kjartan
+   * Monday: NBB 2.0.G.064/070
+   * Wednesday: NBB 2.0.G.064/070
+ * Class 5: Lucas
+   * Monday: NBB 2.3.H.142
+   * Wednesday: NBB 2.3.H.142
+ * Class 6: Lars
+   * Monday: NBB 2.3.I.164 / NBB 2.2.H.142
+   * Wednesday: NBB 2.3.I.164 / NBB 2.2.H.142
+ * Class 7: Utne
+   * Tuesday 13-15: NBB 2.1.I.156
+   * Friday 8-10: NBB 2.1.I.156
 
- -->
 
 ### Room details
 Map of Nørre Campus:
@@ -176,6 +177,7 @@ Cafées will be manned with either 2 or 3 TAs.
 
 ### Rooms
 
+#### Block 1
 Wednesday: 
   * Kanapsalen, NEXS, Nørre Alle 53
   * Auditorium Syd, NEXS, Nørre Alle 51 -- Only in weeks with assignment deadlines.
@@ -184,7 +186,18 @@ Friday:
   * DIKU 1-0-10
   * DIKU 1-0-14
   * DIKU 1-0-18 -- Overflow room in weeks without assignment deadlines.
-  * DIKU 1-0-22 -- Overflow room
+  * DIKU 1-0-22 -- Overflow room.
+
+#### Block 2
+Wednesday: 
+  * NBB 2.0.G.064/070
+  * NBB 2.2.H.142 -- Only in weeks with assignment deadlines.
+  * NBB 2.3.H.142 -- Overflow room.
+
+Friday: 
+  * HCØ A101
+  * HCØ A102
+  * HCØ A103 -- Only in weeks with assignment deadlines.
 
 
 ## Study group formation
