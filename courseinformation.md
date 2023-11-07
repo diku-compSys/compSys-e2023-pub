@@ -188,6 +188,17 @@ Friday:
   * DIKU 1-0-18 -- Overflow room in weeks without assignment deadlines.
   * DIKU 1-0-22 -- Overflow room.
 
+#### Week 46
+Wednesday:
+  * HCØ A101
+  * HCØ A102
+  * HCØ A103
+
+  Friday: 
+  * HCØ A102
+  * HCØ A103
+  * HCØ A104
+
 #### Block 2
 Wednesday: 
   * NBB 2.0.G.064/070
