@@ -29,21 +29,21 @@
 | 46   |        |       |          | Re-exam week - No lectures                                                    |          |
 |      |        |       |          | Hand-in A3  -- Simple client, performance, buffering                          |          |
 | 47   | 20 Nov | CN    | David    | Server Performance                                                            | BOH 12.5-12.7 (Optional read - BOH 8.5-8.7) |
-|      | 22 Nov | Arc   | Finn     | Digital logic                                                                 | COD A.1 - A.3, A.5, A7 - A.9 |
-| 48   | 27 Nov | Arc   | Finn     | Assembler                                                                     | KR 8.1 - 8.7 |
+|      | 22 Nov | Arc   | Finn     | Et minimalt riscv setup                                                       | slides, TBD |
+| 48   | 27 Nov | Arc   | Finn     | Digital logik                                                                 | COD A.1 - A.3, A.5, A7 - A.9, [NandGame](https://nandgame.com/)
 |      | 29 Nov | Arc   | Finn     | En simpel maskine                                                             | COD 4.1 - 4.4 |
 |      |        |       |          | Hand-in A4 -- Threaded Server/application, multi-threaded performance         |  |
-| 49   | 04 Dec | Arc   | Finn     | Simulation af en maskine.                                                     | RISCV 2.2 - 2.6 + 6 [RISCV](https://riscv.org/wp-content/uploads/2017/05/riscv-spec-v2.2.pdf) og lille note om afkodning |
+| 49   | 04 Dec | Arc   | Finn     | A5 - Simulation af en maskine. Riscv afkodning                                | RISCV 2.2 - 2.6 + 6 [RISCV](https://riscv.org/wp-content/uploads/2017/05/riscv-spec-v2.2.pdf) og lille note om afkodning |
 |      | 06 Dec | Arc   | Finn     | Into til Mikroarkitektur: Pipelining og ydeevne                               | COD 4.6 - 4.9 |
 | 50   | 11 Dec | Arc   | Finn     | Avanceret Mikroarkitektur I                                                   | COD 4.11 + [note](https://github.com/diku-compSys/compSys-e2022-pub/blob/main/resources/Afviklingsplot/plot.md) |
-|      | 13 Dec | Arc   | Finn.    | Avanceret Mikroarkitektur II                                                  | TBD + [note](https://github.com/diku-compSys/compSys-e2022-pub/blob/main/resources/Afviklingsplot/plot.md) |
+|      | 13 Dec | Arc   | Finn.    | Avanceret Mikroarkitektur II                                                  | [note](https://github.com/diku-compSys/compSys-e2022-pub/blob/main/resources/Afviklingsplot/plot.md) |
 |      |        |       |          | Hand-in A5 -- Simulation af en maskine                                        |  |
-| 51   | 18 Dec | Arc   | Finn.    | Shared memory multithreading.                                                 | COD 6.1, 6.5, 5.10, 5.14, 2.11 |
+| 51   | 18 Dec | Arc   | Finn.    | Opsamling. Maskinnær optimering. A6                                           | TBD |
 |      | 20 Dec |       |          | TBD                                                                           |         |
 | 52   |        |       |          | Christmas vacation - No lectures                                              |         |
 | 53   |        |       |          | Christmas vacation - No lectures                                              |         |
 | 1    | 03 Jan | CN    | Michael  | Network layer, data plane                                                     | KR 4.1 - 4.2.4, 4.3 (Optional read - [Design Philosophy of DARPA Internet Protocols](http://www.cs.princeton.edu/courses/archive/spr14/cos461/papers/clark88.pdf)) |
-|      |        |       |          | Hand-in A6 -- Performance simulering                                          |         |
+|      |        |       |          | Hand-in A6 -- Maskinnær optimering                                            |         |
 | 2    | 08 Jan | CN    | Michael  | Network layer, control plane                                                  | KR 5.1 - 5.3, KR 6.1 - 6.4.3, KR 8.5 - 8.6 |
 | 2    | 10 Jan | CN    | Michael  | Security Across the Network                                                                              | KR 5.1 - 5.3, KR 6.1 - 6.4.3, KR 8.5 - 8.6 |
 |      | 10 Jan | Recap | TAs      | OS, Julian & Iben, 10:15 to 12:00, HCØ Aud 01                                               |  |
