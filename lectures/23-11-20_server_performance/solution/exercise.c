@@ -88,34 +88,37 @@ int main(int argc, char **argv)
 {   
     char* my_ip = argv[1];
     char* my_port = argv[2];
-    char* peer_ip = argv[3];
-    char* peer_port = argv[4];
     struct PeerAddress my_address;
     memcpy(my_address.ip, my_ip, 16);
     memcpy(my_address.port, my_port, 8);
 
-    struct PeerAddress peer_address;
-    memcpy(peer_address.ip, peer_ip, 16);
-    memcpy(peer_address.port, peer_port, 8);
-
-    char message[MAXLINE];
-    sprintf(message, "Hello from %s:%s\0", my_address.ip, my_address.port);
-    printf("%s\n", message);
-    struct ClientArgs client_args;
-    client_args.address = peer_address;
-    memcpy(client_args.messsage, message, MAXLINE);
-
-    // Setup the client and server threads 
     pthread_t client_thread_id;
+    if (argc > 3) {
+      char* peer_ip = argv[3];
+      char* peer_port = argv[4];
+
+      struct PeerAddress peer_address;
+      memcpy(peer_address.ip, peer_ip, 16);
+      memcpy(peer_address.port, peer_port, 8);
+      char message[MAXLINE];
+      sprintf(message, "Hello from %s:%s\0", my_address.ip, my_address.port);
+      printf("%s\n", message);
+      struct ClientArgs client_args;
+      client_args.address = peer_address;
+      memcpy(client_args.messsage, message, MAXLINE);
+      pthread_create(&client_thread_id, NULL, client_thread, &client_args);
+    }
+    // Setup the client and server threads 
     pthread_t server_thread_id;
-    pthread_create(&client_thread_id, NULL, client_thread, &client_args);
     pthread_create(&server_thread_id, NULL, server_thread, &my_address);
 
     // Start the threads. Note that the client is only started if a peer is 
     // provided in the config. If none is we will assume this peer is the first
     // on the network and so cannot act as a client.
-    Pthread_join(client_thread_id, NULL);
-    Pthread_join(server_thread_id, NULL);
+    if (argc > 3) {
+      pthread_join(client_thread_id, NULL);
+    }
+    pthread_join(server_thread_id, NULL);
     printf("we get here \n");
 
     exit(EXIT_SUCCESS);
