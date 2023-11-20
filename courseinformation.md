@@ -90,7 +90,7 @@ TAs:
  * Wednesdays at 10:15-12:00 in HCØ Aud1
 
 
-### Block 1
+### Block 2
  * Mondays at 13:15-15:00 in HCØ Aud1
  * Wednesdays at 10:15-12:00 in AKB Aud1
 
@@ -149,8 +149,8 @@ See [skema.ku.dk](https://skema.ku.dk/tt/tt.asp?SDB=KU2324&language=DK&folder=Re
    * Monday: NBB 2.3.H.142
    * Wednesday: NBB 2.3.H.142
  * Class 6: Lars
-   * Monday: NBB 2.3.I.164 / NBB 2.2.H.142
-   * Wednesday: NBB 2.3.I.164 / NBB 2.2.H.142
+   * Monday: NBB 2.2.H.142
+   * Wednesday: NBB 2.2.H.142
  * Class 7: Utne
    * Tuesday 13-15: NBB 2.1.I.156
    * Friday 8-10: NBB 2.1.I.156
