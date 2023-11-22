@@ -47,3 +47,17 @@ Check the source code in fib.c to discover how it gets its input.
 Perhaps break it up and ask chatgpt to explain the fragments one by one.
 Be critical.
 
+8. Write your own C program
+
+Try to use some of the facilities, for example input/output.
+
+Take a look at hello.c, fib.c or echo.c for inspiration.
+
+If you're really ambitious, try to build something which uses the dynamic memory
+management  as well (allocate/release).
+
+When things go wrong it is insanely difficult to find out why.
+
+ * You can use the logging facility to see how far in the execution you got.
+ * Best approach to debugging is to put in print_string() calls at the right
+   places in your program.
