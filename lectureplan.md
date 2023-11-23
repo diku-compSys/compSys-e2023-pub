@@ -39,7 +39,7 @@
 |      | 13 Dec | Arc   | Finn.    | Avanceret Mikroarkitektur II                                                  | [note](https://github.com/diku-compSys/compSys-e2022-pub/blob/main/resources/Afviklingsplot/plot.md) |
 |      |        |       |          | Hand-in A5 -- Simulation af en maskine                                        |  |
 | 51   | 18 Dec | Arc   | Finn.    | Opsamling. Maskinnær optimering. A6                                           | TBD |
-|      | 20 Dec |       |          | TBD                                                                           |         |
+|      | 20 Dec |       |          | Christmas lecture: Linux drift i Netcompany AND Quantum Computations          |         |
 | 52   |        |       |          | Christmas vacation - No lectures                                              |         |
 | 53   |        |       |          | Christmas vacation - No lectures                                              |         |
 | 1    | 03 Jan | CN    | Michael  | Network layer, data plane                                                     | KR 4.1 - 4.2.4, 4.3 (Optional read - [Design Philosophy of DARPA Internet Protocols](http://www.cs.princeton.edu/courses/archive/spr14/cos461/papers/clark88.pdf)) |
