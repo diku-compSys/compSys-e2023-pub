@@ -4,7 +4,7 @@
    Prøv at se hvor langt I kan komme, dog ikke længere end til og med
    "switching"
 
-2. COD A.5
+2. COD A.5 (s. A-79)
 
 3. Hvis der er ekstra tid: Gå tilbage til "nandgame.com" og løs
    flere opgaver.
