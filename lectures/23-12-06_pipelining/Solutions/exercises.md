@@ -56,8 +56,76 @@ Det tager længere tid at regne en addresse-offset ud, så hvis vi skal bruge en
 
 
 4.31
-Coming soon...
+Givet kode:
 
+    addi x12, x0,  0   
+    jal  ENT             
+TOP:slli x5,  x12, 3        
+    nop
+    add  x6,  x10, x5       
+    lw   x7,  0(x6)
+    lw   x29, 8(x6)
+    sub  x30, x7,  x29
+    sub  x31, x11, x5
+    sw   x30, 0(x31)
+    addi x12, x12, 2
+ENT:bne  x12, x13, TOP
+TOP:slli x5,  x12, 3
+    add  x6,  x10, x5
+    lw   x7,  0(x6)
+    lw   x29, 8(x6)
+    sub  x30, x7,  x29
+    sub  x31, x11, x5
+    sw   x30, 0(x31)
+    addi x12, x12, 2
+ENT:bne  x12, x13, TOP
+
+1)
+Notation: nop hvis vi ikke kan køre efterfølgende instruktion samtidig med nuværende instruktion
+>>: Der stalles i det forrige komponent, eg EX|>> betyder EX staller
+
+
+    addi x12, x0,  0  |FE|DE|EX|ME|WB
+    nop                
+    jal  ENT             |FE|DE|EX|ME|WB
+    nop
+TOP:slli x5,  x12, 3        |FE|DE|EX|ME|WB
+    nop
+    add  x6,  x10, x5          |FE|DE|EX|ME|WB
+    nop                       
+    lw   x7,  0(x6)               |FE|DE|EX|ME|WB
+    nop     
+    lw   x29, 8(x6)                  |FE|DE|EX|ME|WB
+    nop
+    sub  x30, x7,  x29                  |FE|DE|EX|>>|ME|WB
+    nop
+    sub  x31, x11, x5                      |FE|DE|EX|>>|ME|WB
+    nop
+    sw   x30, 0(x31)                          |FE|DE|EX|>>|ME|WB
+    addi x12, x12, 2                          |FE|DE|EX|>>|ME|WB
+ENT:bne  x12, x13, TOP                           |FE|DE|EX|>>|ME|WB
+    nop
+TOP:slli x5,  x12, 3                                |FE|DE|EX|>>|ME|WB
+    nop
+    add  x6,  x10, x5                                  |FE|DE|EX|>>|ME|WB
+    nop
+    lw   x7,  0(x6)                                       |FE|DE|EX|>>|ME|WB
+    nop
+    lw   x29, 8(x6)                                          |FE|DE|EX|>>|ME|WB
+    nop
+    sub  x30, x7,  x29                                          |FE|DE|EX|>>|>>|ME|WB
+    nop
+    sub  x31, x11, x5                                              |FE|DE|EX|>>|>>|ME|WB
+    nop
+    sw   x30, 0(x31)                                                  |FE|DE|EX|>>|>>|ME|WB
+    addi x12, x12, 2                                                  |FE|DE|EX|>>|>>|ME|WB
+ENT:bne  x12, x13, TOP                                                   |FE|DE|EX|>>|>>|ME|WB
+
+
+2)
+2-issue CPU'en har 15 cykler per loop
+Siden vi kun kan sætte instruktioner sammen et enkelt sted, har vi 16 cykler i en 1-issue.
+Dette giver en speedup på 16/15 = 1.067 = 6.7%
 
 
 
