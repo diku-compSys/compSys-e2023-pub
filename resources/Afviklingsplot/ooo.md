@@ -3,8 +3,7 @@
 
 Alle moderne højtydende processor-kerner har samme grundlæggende design som præsenteres
 nedenfor. Præsentationen her har til formål at gøre performance overvejelser
-(primært omkostningen ved fejlforudsagte hop) meningsfuld, så vi vil se bort fra
-mange detaljer.
+meningsfuld, så vi vil se bort fra mange detaljer.
 
 
 ### Overordnet struktur (mikroarkitektur)
@@ -60,7 +59,7 @@ vil starte med de tre trin Fa, Fb og Fc.
 I de fleste maskinsprog er der bestemte instruktionssekvenser som med fordel kan omskrives
 til en enkelt instruktion på hardware niveau. For eksempel har IA64 ikke nogen compare-and-branch
 instruktion som RISC-V, men må bruge to separate instruktioner for henholdsvis sammenligning
-og betinget hop. De to instruktioner fusioneres almindeligvis til en compare-and-branch.
+og betinget hop. Disse to instruktioner fusioneres på IA64 almindeligvis til en compare-and-branch.
 
 Det er (ofte) en forudsætning for at fusionere to instruktioner:
 
@@ -101,47 +100,47 @@ pile.
 
 ```mermaid
 graph TD
-	Rename(Rename)
-	CFR[Control flow resolution]
-	ROB(Reorder Buffer)
-	Commit(Commit)
-	SpecMap[Register Alias Table]
-	ResMap[CFR RAT]
-	CommitMap[Commit RAT]
-	Freelist[Register Freelist]
-	subgraph Frontend
-	Predict ==> Fetch
-	Fetch ==> Decode
-	Decode ==> Fuse
-	subgraph Renaming
-	Rename -.update.-> SpecMap
-	SpecMap -.lookup.-> Rename
-	end
-	end
-	subgraph Dataflow Execution
-	ROB -.pick.-> ExeArithmetic
-	ROB -.pick.-> ExeLoadStore
-	ROB -.pick.-> CFR
-	end
-	subgraph Backend
-	Commit ==> Done
-	Commit -.update/trigger copy.-> CommitMap
-	end
-	Fuse ==> Rename
-	ROB ==> Commit
-	Rename ==> ROB
-	Commit -.release old.-> Freelist
-	Freelist -.allocate new.-> Rename
-	CommitMap -.copy on exception.-> SpecMap
-	CommitMap -.copy on exception.->ResMap
-	ResMap -.copy on mispredict.-> SpecMap
-	CFR -.trigger copy.-> ResMap
-	ROB -.inorder update.-> ResMap
+        Rename(Rename)
+        CFR[Control flow resolution]
+        ROB(Reorder Buffer)
+        Commit(Commit)
+        SpecMap[Register Alias Table]
+        ResMap[CFR RAT]
+        CommitMap[Commit RAT]
+        Freelist[Register Freelist]
+        subgraph Frontend
+        Predict ==> Fetch
+        Fetch ==> Decode
+        Decode ==> Fuse
+        subgraph Renaming
+        Rename -.update.-> SpecMap
+        SpecMap -.lookup.-> Rename
+        end
+        end
+        subgraph Dataflow Execution
+        ROB -.pick.-> ExeArithmetic
+        ROB -.pick.-> ExeLoadStore
+        ROB -.pick.-> CFR
+        end
+        subgraph Backend
+        Commit ==> Done
+        Commit -.update/trigger copy.-> CommitMap
+        end
+        Fuse ==> Rename
+        ROB ==> Commit
+        Rename ==> ROB
+        Commit -.release old.-> Freelist
+        Freelist -.allocate new.-> Rename
+        CommitMap -.copy on exception.-> SpecMap
+        CommitMap -.copy on exception.->ResMap
+        ResMap -.copy on mispredict.-> SpecMap
+        CFR -.trigger copy.-> ResMap
+        ROB -.inorder update.-> ResMap
 ```
 
 Registeromdøbning udføres ved hjælp af en omdøbningstabel, "Register Alias Table" eller "RAT". 
 Denne tabel associerer hvert logisk registernummer med et fysisk registernummer. 
-Instruktionens logiske kilde-registre slås op i tabellen og de tilsvarende fysiske registre følger
+Instruktionens logiske kilde-registre slås op i tabellen og de tilsvarende fysiske registernumre følger
 med instruktionen videre frem i maskinen. Sluttelig allokeres et fysisk destinationsregister
 fra en friliste og omdøbningstabellen opdateres så den afspejler den nye binding fra
 logisk til fysisk registernummer.
@@ -177,8 +176,8 @@ Registeromdøbning er designet til at understøtte præcise "exceptions" som fø
 Hvis en instruktion fejler, så markeres den blot som fejlet men iøvrigt fortsætter
 udførelsen. Instruktionshentning stopper dog omgående og afventer. Når den fejlende
 instruktion er blevet den ældste instruktion og når til commit-trinnet så aborteres alle andre
-instruktioner og omdøbningstabellen i commit (Commit RAT) kopieres til omdøbningstabellen
-i forenden af pipelinen (RAT). Endeligt returneres de fysiske destinationsregistre
+instruktioner og  omdøbningstabellen i forenden af pipelinen (RAT) geninitialiseres fra omdøbningstabellen i commit (Commit RAT). 
+Endeligt returneres de fysiske destinationsregistre
 for de aborterede instruktioner til frilisten. Som nævnt tidligere implementeres
 friliste og listen over allokerede fysiske registre med en cirkulær buffer og frigivelse
 kan gøres ved at sætte tælleren for allokering så den svarer til tælleren for
@@ -194,14 +193,15 @@ instruktion og når commit-trinnet.
 For at kunne reagere hurtigere implementeres en mekanisme som fungerer analogt til
 commit, men kun begrænses af de betingede instruktioner, der endnu ikke er blevet afgjort.
 (Det vil sige: den ignorerer fejlende instruktioner)
+
 Mekanismen scanner instruktionerne og de allokerede fysiske destinationsregistre i 
 programrækkefølge og opdaterer endnu en omdøbningstabel (CFR RAT). Denne RAT repræsenterer
 maskinens tilstand ved den nyeste (i programforløbet) endnu ikke afgjorte betingelse. 
 Hvis denne nyeste ikke afgjorte betingelse viser sig at være fejlforudsagt, så kopieres
 CFR RAT til RAT, yngre instruktioner aborteres og deres allokerede destinationsregistre
 returneres til frilisten. Samtidigt omdirigeres instruktionshentning til den korrekte
-adresse. Fordi det tager tid at fylde forenden af mikroarkitekturen kan omkostningen
-ved at opdatere RATs, frilister osv skjules. Fra et performance-perspektiv gælder
+adresse. Fordi det tager tid at fylde forenden af mikroarkitekturen med nye instruktioner
+kan omkostningen ved at opdatere RATs, frilister osv skjules. Fra et performance-perspektiv gælder
 stadig at første fase af instruktions-hentning kan ske i maskincyklen umiddelbart
 efter et betinget hop afgøres som fejlforudsagt.
 
@@ -228,7 +228,7 @@ alle: Fa Fb Fc De Fu Al Rn Qu ...out-of-order... Ca Cb
 ~~~
 
 Fusionering af to instruktioner markeres ved at den første af dem holder op med at
-eksistere i efter "Fu" i afviklingsplottet.
+eksistere efter "Fu" i afviklingsplottet.
 
 ### Dataflow baseret udførelse
 
@@ -297,7 +297,7 @@ Fa Fb Fc De Fu Al Rn Qu -- -- -- pk rd ex wb Ca Cb
 Vi har nu beskrevet tilstrækkeligt meget af mikroarkitekturen til at vi kan bestemme
 hvad et fejlforudsagt hop koster (i vores maskine). "Fa" for instruktionen efter hoppet 
 kan tidligst ligge i cyklen efter "ex" for det fejlforudsagte hop. Det giver en 
-"branch mispredict penalty" på 11 maskincykler.
+"branch mispredict penalty" på 10 maskincykler.
 
 Typiske tal for moderne mikroarkitekturer er 10-15 maskincykler.
 
@@ -343,7 +343,7 @@ følgende data:
  * Data (altid som et word på adresse delelig med 4)
  * Er data gyldig - dette angives pr byte
 
-Vi allokerer pladser i store-køen i rename-trinnet. 
+Vi allokerer pladser i store-køen samtidig med registeromdøbning.
 
 En store instruktion udføres som to særskilte operationer
 
@@ -462,15 +462,15 @@ while (ptr < limit) { sum += *ptr++; }
 To gennemløb:
 
 ~~~
-						0  1  2  3  4  5  6  7  8  9  0  1  2  3  4  5  6  7  8
-0:  lw x11,0(x10)		Fa Fb Fc De Fu Al Rn Qu pk rd ag ma mb mc wb Ca Cb
-4:  add x10,x10,4		Fa Fb Fc De Fu Al Rn Qu pk rd ex wb -- -- -- Ca Cb
-8:  add x12,x12,x11		Fa Fb Fc De Fu Al Rn Qu -- -- -- -- pk rd ex wb Ca Cb
-C:  bne x10,x13,0		Fa Fb Fc De Fu Al Rn Qu -- pk rd ex -- -- -- -- Ca Cb
-0:  lw x11,0(x10)		   Fa Fb Fc De Fu Al Rn Qu pk rd ag ma mb mc wb Ca Cb
-4:  add x10,x10,4		   Fa Fb Fc De Fu Al Rn Qu pk rd ex -- -- -- -- Ca Cb
-8:  add x12,x12,x11		   Fa Fb Fc De Fu Al Rn Qu -- -- -- -- pk rd ex wb Ca Cb
-C:  bne x10,x13,0		   Fa Fb Fc De Fu Al Rn Qu -- pk rd ex wb -- -- -- Ca Cb
+                                0  1  2  3  4  5  6  7  8  9  0  1  2  3  4  5  6  7  8
+0:  lw x11,0(x10)               Fa Fb Fc De Fu Al Rn Qu pk rd ag ma mb mc wb Ca Cb
+4:  add x10,x10,4               Fa Fb Fc De Fu Al Rn Qu pk rd ex wb -- -- -- Ca Cb
+8:  add x12,x12,x11             Fa Fb Fc De Fu Al Rn Qu -- -- -- -- pk rd ex wb Ca Cb
+C:  bne x10,x13,0               Fa Fb Fc De Fu Al Rn Qu -- pk rd ex -- -- -- -- Ca Cb
+0:  lw x11,0(x10)                  Fa Fb Fc De Fu Al Rn Qu pk rd ag ma mb mc wb Ca Cb
+4:  add x10,x10,4                  Fa Fb Fc De Fu Al Rn Qu pk rd ex -- -- -- -- Ca Cb
+8:  add x12,x12,x11                Fa Fb Fc De Fu Al Rn Qu -- -- -- -- pk rd ex wb Ca Cb
+C:  bne x10,x13,0                  Fa Fb Fc De Fu Al Rn Qu -- pk rd ex wb -- -- -- Ca Cb
 ~~~
 
 På denne kodestump opnås en IPC på 4.

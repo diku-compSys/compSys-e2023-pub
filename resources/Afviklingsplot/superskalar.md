@@ -17,7 +17,7 @@ andre: "Fe De Ex Wb"
 
 ressourcer: Fe:2, De:2, Ex:2, Ag:1, Me:1, Wb:2
 ~~~
-Forkortelsen "Ag" står for "Address generate".
+Forkortelsen "Ag" står for "Address generate" som så erstatter brugen af den generelle ALU til at beregne adresser ved lagertilgang.
 
 Her er et plot af to iterationer af en løkke der kopierer data fra et område til et andet:
 
@@ -45,7 +45,7 @@ Bemærk at Wb i dette plot ikke gennemløbes i programrækkefølge. Det er en f�
 
 1. Sikring af korrekt skrive-rækkefølge: Hvad hvis to instruktioner begge skal opdatere samme register, men den sidste når Wb før den første?
 2. Korrekt hazard-detektion og forwarding: Hvis der er flere instruktioner med samme destinationsregister in-flight, hvilken af dem matcher så en senere instruktions kilde-register?
-2. Exception håndtering: Hvad hvis en instruktion med sen Wb trigger en exception, hvilket opdages i Wb eller trinnet før, mens en senere instruktion med tidlig Wb opdaterer sit destinationsregister? Den senere instruktion må logisk set ikke udføres.
+3. Exception håndtering: Hvad hvis en instruktion med sen Wb trigger en exception, hvilket opdages i Wb eller trinnet før, mens en senere instruktion med tidlig Wb opdaterer sit destinationsregister? Den senere instruktion må logisk set ikke udføres.
 
 Det beskrives senere hvordan disse problemer har en samlet løsning i out-of-order maskiner.
 
@@ -113,23 +113,23 @@ IPC er her 10/6
 Det er også muligt at forbedre håndteringen af hop, kald og retur ved at smide flere hardware-ressourcer
 efter problemet. En ofte anvendt fremgangsmåde går ud på at splitte pipelinen i en for-ende og en bag-ende 
 adskilt af en mindre kø, hvor forenden overdimensioneres. Dette design tillader forenden at "kigge frem"
-i instruktionsstrømmen og håndtere hop, kald og retur tidligere. Det er nødvendigt at udvide pipelinen
-med et trin mellem Fe og De som vi vil kalde Pq for "predict and queue". 
+i instruktionsstrømmen og forudsige hop, kald og retur tidligere. Det er nødvendigt at udvide pipelinen
+med to trin mellem Fe og De som vi vil kalde "Pr" og "Qu" hvilket står for henholdsvis "predict" og "queue". 
 
 Denne form for mikroarkitektur siges at have "afkoblet prefetching" (eller "aggressiv prefetching")
 
 Her er et eksempel på specifikationen af sådan en maskine:
 
 ~~~Text
-load:          "Fe Pq De Ex Me Wb"  depend(Ex,rs1), produce(Me,rd)
-store:         "Fe Pq De Ex Me"     depend(Ex,rs1), depend(Me,rs2)
-ubetinget hop: "Fe Pq"      -
-betinget hop:  "Fe Pq De Ex"        depend(Ex,rs1), depend(Ex,rs2)
-kald:          "Fe Pq De Ex"        produce(Ex,rd)
-retur:         "Fe Pq De Ex"        depend(Ex,rs1)
-andre:         "Fe Pq De Ex Wb"     depend(Ex,rs1), depend(Ex,rs2), produce(Ex,rd)
+load:          "Fe Pr Qu De Ex Me Wb"  depend(Ex,rs1), produce(Me,rd)
+store:         "Fe Pr Qu De Ex Me"     depend(Ex,rs1), depend(Me,rs2)
+ubetinget hop: "Fe Pr"                 -
+betinget hop:  "Fe Pr Qu De Ex"        depend(Ex,rs1), depend(Ex,rs2)
+kald:          "Fe Pr Qu De Ex"        produce(Ex,rd)
+retur:         "Fe Pr Qu De Ex"        depend(Ex,rs1)
+andre:         "Fe Pr Qu De Ex Wb"     depend(Ex,rs1), depend(Ex,rs2), produce(Ex,rd)
 
-ressourcer: Fe:4, Pq: 4, De:4, Ex:2, Ag:1, Me:1, Wb:2
+ressourcer: Fe:4, Pr: 4, Qu:4, De:2, Ex:2, Ag:1, Me:1, Wb:2
 
 ubetinget hop:                    produce(Pq, Pc)
 kald:                             produce(Pq, Pc)
@@ -144,17 +144,17 @@ To iterationer af vores løkke fra tidligere afsnit giver følgende plot:
 
 ~~~
                                 0  1  2  3  4  5  6  7  8  9  10 11 12 13 14 15
-0:     lw   x12,0(x11)          Fe Pq De Ag Me Wb
-4:     addi x11,x11,4           Fe Pq De Ex Wb
-8:     sw   x12,0(x10)          Fe Pq >> De Ag Me
-C:     addi x10,x10,4           Fe Pq >> De Ex Wb
-10:    bne  x11,x15,0              Fe Pq De Ex
-0:     lw   x12,0(x11)                   Fe Pq De Ag Me Wb
-4:     addi x11,x11,4                    Fe Pq De Ex Wb
-8:     sw   x12,0(x10)                   Fe Pq >> De Ag Me
-C:     addi x10,x10,4                    Fe Pq >> De Ex Wb
-10:    bne  x11,x15,0                       Fe Pq De Ex
-0:     ...                                        Fe De Ex....
+0:     lw   x12,0(x11)          Fe Pr Qu De Ag Me Wb
+4:     addi x11,x11,4           Fe Pr Qu De Ex Wb
+8:     sw   x12,0(x10)          Fe Pr >> Qu De Ag Me
+C:     addi x10,x10,4           Fe Pr >> Qu De Ex Wb
+10:    bne  x11,x15,0              Fe Pr >> Qu De Ex
+0:     lw   x12,0(x11)                   Fe Pr Qu De Ag Me Wb
+4:     addi x11,x11,4                    Fe Pr Qu De Ex Wb
+8:     sw   x12,0(x10)                   Fe Pr >> Qu De Ag Me
+C:     addi x10,x10,4                    Fe Pr >> Qu De Ex Wb
+10:    bne  x11,x15,0                       Fe Pr >> Qu De Ex
+0:     ...                                        Fe Pr Qu De Ex....
 ~~~
 
 Også her er IPC 10/6

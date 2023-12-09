@@ -72,7 +72,7 @@ derfor har brug for et pipeline-trin til det formål, men da alle instruktioner
 tvinges igennem dette pipeline-trin kan man vælge at ignorere det.
 
 I en mere kompliceret pipeline vil man opdele instruktionerne i flere klasser fordi 
-forskellige instruktioner har brug for forskellige ressourcer. En tænkt eksempel: 
+forskellige instruktioner har brug for forskellige ressourcer. Et tænkt eksempel: 
 en maskine hvor kun load og store har et pipeline-trin for lagertilgang, mens de 
 øvrige instruktioner kan gå direkte fra "Ex" til "Wb" - og "store" instruktioner 
 kan helt undvære Wb:

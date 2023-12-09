@@ -39,42 +39,48 @@ længere end bogens. I almindelighed bruges 3 pipeline trin til cache-tilgang. V
 gå i detaljer med hvad der sker i disse tre trin - de er bare trin Fa,Fb og Fc samt Ma, Mb og Mc.
 
 #### Udfordringer ved instruktionshentning
+
 Lad os genbruge eksemplet fra den superskalare maskine med afkoblet prefetching. Maskinen ser nu således ud:
 
 ~~~Test
-load:  "Fa Fb Fc Pq De Ex Ma Mb Mc Wb"   depend(Ex,rs1), depend(Ex,rd), produce(Mc,rd)
-store: "Fa Fb Fc Pq De Ex Ma Mb Mc"      depend(Ex,rs1), depend(Mc,rs2)
-ubetinget hop: "Fa Fb Fc Pq"       	     -
-betinget hop:  "Fa Fb Fc Pq De Ex"       depend(Ex,rs1), depend(Ex,rs2)
-kald:  "Fa Fb Fc Pq De Ex"               produce(Ex,rd)
-retur: "Fa Fb Fc Pq De Ex"               depend(Ex,rs1)
-andre: "Fa Fb Fc Pq De Ex Wb"            depend(Ex,rs1), depend(Ex,rs2), depend(Ex,rd), produce(Ex,rd)
+load:  "Fa Fb Fc Pr Qu De Ex Ma Mb Mc Wb"   depend(Ex,rs1), depend(Ex,rd), produce(Mc,rd)
+store: "Fa Fb Fc Pr Qu De Ex Ma Mb Mc"      depend(Ex,rs1), depend(Mc,rs2)
+ubetinget hop: "Fa Fb Fc Pr Qu"             -
+betinget hop:  "Fa Fb Fc Pr Qu De Ex"       depend(Ex,rs1), depend(Ex,rs2)
+kald:  "Fa Fb Fc Pr Qu De Ex"               produce(Ex,rd)
+retur: "Fa Fb Fc Pr Qu De Ex"               depend(Ex,rs1)
+andre: "Fa Fb Fc Pr Qu De Ex Wb"            depend(Ex,rs1), depend(Ex,rs2), depend(Ex,rd), produce(Ex,rd)
 
-ressourcer: Fa:4, Fb:4, Fc4, Pq: 4, De:4, Ex:2, Ag:1, Ma:1, Mb:1, Mc:1, Wb:2
+ressourcer: Fa:4, Fb:4, Fc4, Pr:4, Qu: 4, De:2, Ex:2, Ag:1, Ma:1, Mb:1, Mc:1, Wb:2
 
-ubetinget hop:                    produce(Pq, Pc)
-kald:                             produce(Pq, Pc)
+ubetinget hop:                    produce(Pr, Pc)
+kald:                             produce(Pr, Pc)
 retur:                            produce(Ex, Pc)
-betinget hop baglæns taget:       produce(Pq, PC)
+betinget hop baglæns taget:       produce(Pr, PC)
 betinget hop baglæns ikke taget:  produce(Ex, PC)
 betinget hop forlæns taget:       produce(Ex, PC)
 betinget hop forlæns ikke taget:  -
 ~~~
+Bemærk at store instruktioner først skal have den værdi de skal lagre i Mc, frem for i Ex.
+Dette er muligt fordi beregning af adresse og søgning i cache kan foregå uden den værdi der
+skal lagres. Og det er vigtigt for ydeevnen da vi derved kan undgå mange unødige pipeline
+stalls.
+
 Vort eksempel fra tidligere giver nu følgende plot:
 
 ~~~
                                 0  1  2  3  4  5  6  7  8  9  10 11 12 13 14 15
-0:     lw   x12,0(x11)          Fa Fb Fc Pq De Ag Ma Mb Mc Wb
-4:     addi x11,x11,4           Fa Fb Fc Pq De Ex Wb
-8:     sw   x12,0(x10)          Fa Fb Fc Pq >> De Ag Ma Mb Mc
-C:     addi x10,x10,4           Fa Fb Fc Pq >> De Ex Wb
-10:    bne  x11,x15,0              Fa Fb Fc Pq De Ex
-0:     lw   x12,0(x11)                         Fa Fb Fc Pq De Ag Ma Mb Mc Wb
-4:     addi x11,x11,4                          Fa Fb Fc Pq De Ex Wb
-8:     sw   x12,0(x10)                         Fa Fb Fc Pq >> De Ag Ma Mb Mc
-C:     addi x10,x10,4                          Fa Fb Fc Pq >> De Ex Wb
-10:    bne  x11,x15,0                             Fa Fb Fc Pq De Ex
-0:     ...                                                    Fa De Ex....
+0:     lw   x12,0(x11)          Fa Fb Fc Pr Qu De Ag Ma Mb Mc Wb
+4:     addi x11,x11,4           Fa Fb Fc Pr Qu De Ex Wb
+8:     sw   x12,0(x10)          Fa Fb Fc Pr >> Qu De Ag Ma Mb Mc
+C:     addi x10,x10,4           Fa Fb Fc Pr >> Qu De Ex Wb
+10:    bne  x11,x15,0              Fa Fb Fc Pr >> Qu De Ex
+0:     lw   x12,0(x11)                         Fa Fb Fc Pr Qu De Ag Ma Mb Mc Wb
+4:     addi x11,x11,4                          Fa Fb Fc Pr Qu De Ex Wb
+8:     sw   x12,0(x10)                         Fa Fb Fc Pr >> Qu De Ag Ma Mb Mc
+C:     addi x10,x10,4                          Fa Fb Fc Pr >> Qu De Ex Wb
+10:    bne  x11,x15,0                             Fa Fb Fc Pr >> Qu De Ex
+0:     ...                                                    Fa Fb Fc Pr Qu De Ex....
 ~~~
 
 Nu er IPC blot 1.
@@ -87,17 +93,17 @@ Ofte tilføjer man en BTB (Branch Target Buffer) til designet for at forbedre in
 
 ~~~
                                 0  1  2  3  4  5  6  7  8  9  10 11 12 13 14 15
-0:     lw   x12,0(x11)          Fa Fb Fc Pq De Ag Ma Mb Mc Wb
-4:     addi x11,x11,4           Fa Fb Fc Pq De Ex Wb
-8:     sw   x12,0(x10)          Fa Fb Fc Pq >> De Ag Ma Mb Mc
-C:     addi x10,x10,4           Fa Fb Fc Pq >> De Ex Wb
-10:    bne  x11,x15,0              Fa Fb Fc Pq De Ex
-0:     lw   x12,0(x11)                   Fa Fb Fc Pq De Ag Ma Mb Mc Wb
-4:     addi x11,x11,4                    Fa Fb Fc Pq De Ex Wb
-8:     sw   x12,0(x10)                   Fa Fb Fc Pq >> De Ag Ma Mb Mc
-C:     addi x10,x10,4                    Fa Fb Fc Pq >> De Ex Wb
-10:    bne  x11,x15,0                       Fa Fb Fc Pq De Ex
-0:     ...                                        Fa De Ex....
+0:     lw   x12,0(x11)          Fa Fb Fc Pr Qu De Ag Ma Mb Mc Wb
+4:     addi x11,x11,4           Fa Fb Fc Pr Qu De Ex Wb
+8:     sw   x12,0(x10)          Fa Fb Fc Pr >> Qu De Ag Ma Mb Mc
+C:     addi x10,x10,4           Fa Fb Fc Pr >> Qu De Ex Wb
+10:    bne  x11,x15,0              Fa Fb Fc Pr >> Qu De Ex
+0:     lw   x12,0(x11)                   Fa Fb Fc Pr Qu De Ag Ma Mb Mc Wb
+4:     addi x11,x11,4                    Fa Fb Fc Pr Qu De Ex Wb
+8:     sw   x12,0(x10)                   Fa Fb Fc Pr >> Qu De Ag Ma Mb Mc
+C:     addi x10,x10,4                    Fa Fb Fc Pr >> Qu De Ex Wb
+10:    bne  x11,x15,0                       Fa Fb Fc Pr >> Qu De Ex
+0:     ...                                        Fa Fb Fc Pr Qu De Ex....
 ~~~
 
 Her er IPC 5/3
@@ -115,20 +121,22 @@ while (ptr < limit) { sum += *ptr++; }
 To gennemløb:
 
 ~~~
-						0  1  2  3  4  5  6  7  8  9
-0:  lw x11,0(x10)		Fa Fb Fc Pq De Ag Ma Mb Mc Wb
-4:  add x10,x10,4		Fa Fb Fc Pq De Ex Wb
-8:  add x12,x12,x11		Fa Fb Fc Pq >> >> >> >> De Ex Wb
-C:  bne x10,x13,0		Fa Fb Fc Pq >> >> >> >> De Ex
-0:  lw x11,0(x10)		      Fa Fb Fc Pq >> >> De Ag Ma Mb Mc Wb
-4:  add x10,x10,4		      Fa Fb Fc Pq >> >> De Ex Wb
-8:  add x12,x12,x11		      Fa Fb Fc >> >> >> Pq >> >> >> De Ex Wb
-C:  bne x10,x13,0		      Fa Fb Fc >> >> >> Pq >> >> >> De Ex
+                                0  1  2  3  4  5  6  7  8  9
+0:  lw x11,0(x10)               Fa Fb Fc Pr Qu De Ag Ma Mb Mc Wb
+4:  add x10,x10,4               Fa Fb Fc Pr Qu De Ex Wb
+8:  add x12,x12,x11             Fa Fb Fc Pr >> Qu >> >> >> De Ex Wb
+C:  bne x10,x13,0               Fa Fb Fc Pr >> Qu >> >> >> De Ex
+0:  lw x11,0(x10)                     Fa Fb Fc Pr >> >> >> Qu De Ag Ma Mb Mc Wb
+4:  add x10,x10,4                     Fa Fb Fc Pr >> >> >> Qu De Ex Wb
+8:  add x12,x12,x11                   Fa Fb Fc >> >> >> Pr >> Qu >> >> >> De Ex Wb
+C:  bne x10,x13,0                     Fa Fb Fc >> >> >> Pr >> Qu >> >> >> De Ex
 ~~~
 
 For en IPC på 1.
 
-Her er instruktionshentning ikke den begrænsende faktor. I stedet ses det at instruktioner som er afhængige af en load instruktion hurtigt vil kunne putte en prop i maskinen, fordi de skal vente i "De" indtil resultatet fra load instruktionen kan forwardes i slutningen af "Mc".
+Her er instruktionshentning ikke den begrænsende faktor. I stedet er det instruktioner der skal vente
+på resultatet af en load der er mest begrænsende. De skal vente i "De" indtil resultatet fra load instruktionen 
+kan forwardes i slutningen af "Mc".
 
 ### Opsamling
 
