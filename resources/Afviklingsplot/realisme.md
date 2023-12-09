@@ -50,7 +50,7 @@ kald:  "Fa Fb Fc Pq De Ex"               produce(Ex,rd)
 retur: "Fa Fb Fc Pq De Ex"               depend(Ex,rs1)
 andre: "Fa Fb Fc Pq De Ex Wb"            depend(Ex,rs1), depend(Ex,rs2), depend(Ex,rd), produce(Ex,rd)
 
-ressourcer: Fa:4, Fb:4, Fc4, Pq: 4, De:4, Ex:2, Ag:1, Mm:1, Wb:2
+ressourcer: Fa:4, Fb:4, Fc4, Pq: 4, De:4, Ex:2, Ag:1, Ma:1, Mb:1, Mc:1, Wb:2
 
 ubetinget hop:                    produce(Pq, Pc)
 kald:                             produce(Pq, Pc)

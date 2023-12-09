@@ -11,11 +11,11 @@ Det gik an at bygge en maskine med to ALUer, men de dyreste ressourcer kunne man
 Vi kan beskrive denne ressource-inddeling således:
 
 ~~~
-load:  "Fe De Ag Mm Wb"
-store: "Fe De Ag Mm"
+load:  "Fe De Ag Me Wb"
+store: "Fe De Ag Me"
 andre: "Fe De Ex Wb"
 
-ressourcer: Fe:2, De:2, Ex:2, Ag:1, Mm:1, Wb:2
+ressourcer: Fe:2, De:2, Ex:2, Ag:1, Me:1, Wb:2
 ~~~
 Forkortelsen "Ag" står for "Address generate".
 
@@ -26,14 +26,14 @@ forudsiger hentning i De)
 
 ~~~
                                 0  1  2  3  4  5  6  7  8  9  10 11 12 13 14 15
-0:     lw   x12,0(x11)          Fe De Ag Mm Wb
+0:     lw   x12,0(x11)          Fe De Ag Me Wb
 4:     addi x11,x11,4           Fe De Ex Wb
-8:     sw   x12,0(x10)             Fe De Ag Mm
+8:     sw   x12,0(x10)             Fe De Ag Me
 C:     addi x10,x10,4              Fe De Ex Wb
 10:    bne  x11,x15,0                 Fe De Ex
-0:     lw   x12,0(x11)                      Fe De Ag Mm Wb
+0:     lw   x12,0(x11)                      Fe De Ag Me Wb
 4:     addi x11,x11,4                       Fe De Ex Wb
-8:     sw   x12,0(x10)                         Fe De Ag Mm
+8:     sw   x12,0(x10)                         Fe De Ag Me
 C:     addi x10,x10,4                          Fe De Ex Wb
 10:    bne  x11,x15,0                             Fe De Ex
 0:     ...                                              Fe De Ex....
@@ -93,14 +93,14 @@ Gevinsten kan ses af følgende plot, hvor vi har udrullet løkken fra tidligere:
 
 ~~~
                                 0  1  2  3  4  5  6  7  8  9  10 11 12 13 14 15
-0:     lw   x12,0(x11)          Fe De Ag Mm Wb
+0:     lw   x12,0(x11)          Fe De Ag Me Wb
 4:     addi x11,x11,4           Fe De Ex Wb
-8:     sw   x12,0(x10)             Fe De Ag Mm
+8:     sw   x12,0(x10)             Fe De Ag Me
 C:     addi x10,x10,4              Fe De Ex Wb
 10:    beq  x11,x15,0                 Fe De Ex
-14:    lw   x12,0(x11)                Fe De Ag Mm Wb
+14:    lw   x12,0(x11)                Fe De Ag Me Wb
 18:    addi x11,x11,4                    Fe De Ex Wb
-1C:    sw   x12,0(x10)                   Fe De Ag Mm
+1C:    sw   x12,0(x10)                   Fe De Ag Me
 20:    addi x10,x10,4                       Fe De Ex Wb
 24:    bne  x11,x15,0                       Fe De Ex
 0:     ...                                        Fe De Ex....
@@ -121,15 +121,15 @@ Denne form for mikroarkitektur siges at have "afkoblet prefetching" (eller "aggr
 Her er et eksempel på specifikationen af sådan en maskine:
 
 ~~~Text
-load:          "Fe Pq De Ex Mm Wb"  depend(Ex,rs1), produce(Mm,rd)
-store:         "Fe Pq De Ex Mm"     depend(Ex,rs1), depend(Mm,rs2)
+load:          "Fe Pq De Ex Me Wb"  depend(Ex,rs1), produce(Me,rd)
+store:         "Fe Pq De Ex Me"     depend(Ex,rs1), depend(Me,rs2)
 ubetinget hop: "Fe Pq"      -
 betinget hop:  "Fe Pq De Ex"        depend(Ex,rs1), depend(Ex,rs2)
 kald:          "Fe Pq De Ex"        produce(Ex,rd)
 retur:         "Fe Pq De Ex"        depend(Ex,rs1)
 andre:         "Fe Pq De Ex Wb"     depend(Ex,rs1), depend(Ex,rs2), produce(Ex,rd)
 
-ressourcer: Fe:4, Pq: 4, De:4, Ex:2, Ag:1, Mm:1, Wb:2
+ressourcer: Fe:4, Pq: 4, De:4, Ex:2, Ag:1, Me:1, Wb:2
 
 ubetinget hop:                    produce(Pq, Pc)
 kald:                             produce(Pq, Pc)
@@ -144,14 +144,14 @@ To iterationer af vores løkke fra tidligere afsnit giver følgende plot:
 
 ~~~
                                 0  1  2  3  4  5  6  7  8  9  10 11 12 13 14 15
-0:     lw   x12,0(x11)          Fe Pq De Ag Mm Wb
+0:     lw   x12,0(x11)          Fe Pq De Ag Me Wb
 4:     addi x11,x11,4           Fe Pq De Ex Wb
-8:     sw   x12,0(x10)          Fe Pq >> De Ag Mm
+8:     sw   x12,0(x10)          Fe Pq >> De Ag Me
 C:     addi x10,x10,4           Fe Pq >> De Ex Wb
 10:    bne  x11,x15,0              Fe Pq De Ex
-0:     lw   x12,0(x11)                   Fe Pq De Ag Mm Wb
+0:     lw   x12,0(x11)                   Fe Pq De Ag Me Wb
 4:     addi x11,x11,4                    Fe Pq De Ex Wb
-8:     sw   x12,0(x10)                   Fe Pq >> De Ag Mm
+8:     sw   x12,0(x10)                   Fe Pq >> De Ag Me
 C:     addi x10,x10,4                    Fe Pq >> De Ex Wb
 10:    bne  x11,x15,0                       Fe Pq De Ex
 0:     ...                                        Fe De Ex....
