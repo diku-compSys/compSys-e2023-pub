@@ -35,8 +35,8 @@
 |      |        |       |          | Hand-in A4 -- Threaded Server/application, multi-threaded performance         |  |
 | 49   | 04 Dec | Arc   | Finn     | A5 - Simulation af en maskine. Riscv afkodning                                | RISCV 2.2 - 2.6 + 6 [RISCV](https://riscv.org/wp-content/uploads/2017/05/riscv-spec-v2.2.pdf) og lille note om afkodning |
 |      | 06 Dec | Arc   | Finn     | Into til Mikroarkitektur: Pipelining og ydeevne                               | COD 4.6 - 4.9 |
-| 50   | 11 Dec | Arc   | Finn     | Avanceret Mikroarkitektur I                                                   | COD 4.11 + [note](https://github.com/diku-compSys/compSys-e2022-pub/blob/main/resources/Afviklingsplot/plot.md) |
-|      | 13 Dec | Arc   | Finn.    | Avanceret Mikroarkitektur II                                                  | [note](https://github.com/diku-compSys/compSys-e2022-pub/blob/main/resources/Afviklingsplot/plot.md) |
+| 50   | 11 Dec | Arc   | Finn     | Avanceret Mikroarkitektur I                                                   | COD 4.11 + [note](https://github.com/diku-compSys/compSys-e2023-pub/blob/main/resources/Afviklingsplot/plot.md) |
+|      | 13 Dec | Arc   | Finn.    | Avanceret Mikroarkitektur II                                                  | [note](https://github.com/diku-compSys/compSys-e2023-pub/blob/main/resources/Afviklingsplot/plot.md) |
 |      |        |       |          | Hand-in A5 -- Simulation af en maskine                                        |  |
 | 51   | 18 Dec | Arc   | Finn.    | Opsamling. Maskinnær optimering. A6                                           | TBD |
 |      | 20 Dec |       |          | Christmas lecture: Linux drift i Netcompany AND Quantum Computations          |         |
