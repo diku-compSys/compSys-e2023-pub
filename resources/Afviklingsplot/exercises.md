@@ -2,11 +2,6 @@
 
 ## Opgave 1
 
-(Denne opgave er tidligere stillet som øvelsesopgave den 14. december. På det tidspunkt
-var der forvirring om brugen af "Qu" og "Ca" resourcerne -- derfor er noten om
-afviklingsplot præciseret 7. januar med indførelse af "Q*" og "C*" og nedenstående 
-matcher den opdaterede version af noten)
-
 Denne opgave handler om forskellige out-of-order maskiners ydeevne ved udførelse
 af en og samme stump kode.
 
