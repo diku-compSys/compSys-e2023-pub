@@ -121,8 +121,8 @@ Denne form for mikroarkitektur siges at have "afkoblet prefetching" (eller "aggr
 Her er et eksempel på specifikationen af sådan en maskine:
 
 ~~~Text
-load:          "Fe Pr Qu De Ex Me Wb"  depend(Ex,rs1), produce(Me,rd)
-store:         "Fe Pr Qu De Ex Me"     depend(Ex,rs1), depend(Me,rs2)
+load:          "Fe Pr Qu De Ag Me Wb"  depend(Ex,rs1), produce(Me,rd)
+store:         "Fe Pr Qu De Ag Me"     depend(Ex,rs1), depend(Me,rs2)
 ubetinget hop: "Fe Pr"                 -
 betinget hop:  "Fe Pr Qu De Ex"        depend(Ex,rs1), depend(Ex,rs2)
 kald:          "Fe Pr Qu De Ex"        produce(Ex,rd)
