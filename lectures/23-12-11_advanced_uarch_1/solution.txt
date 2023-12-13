@@ -1,0 +1,57 @@
+S-Type:
+sw rs2, imm(rs1)
+
+Loads:
+lw rd, imm(rs1)
+
+Grundlæggende alle andre instruktioner: 
+inst rd, rs1, rs2/imm
+
+Husk: >> indikerer at den staller i den fase som efterfølger, så De >> Ex, betyder et stall i Ex.
+
+Simpel pipeline uden branch prediction, dvs. for bge: produce(Ex, PC)
+
+I første iteration er der et hop, i anden ikke. (Det gør ingen forskel uden branch prediction)
+
+loop:                    0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19
+    addi x4,x4,1        Fe De Ex Me Wb
+    slli x11,x4,5          Fe De Ex Me Wb
+    add  x11,x16,x11          Fe De Ex Me Wb
+    lw	 x11,8(x11)              Fe De Ex Me Wb
+    slli x12,x4,2                   Fe De Ex Me Wb
+    add	 x12,x17,x12                   Fe De Ex Me Wb
+    sw   x11,0(x12)                       Fe De Ex Me Wb
+    bge  x9,x4,Loop                          Fe De Ex Me Wb
+loop:
+    addi x4,x4,1                                      Fe De Ex Me Wb
+    slli x11,x4,5                                        Fe De Ex Me Wb
+    add  x11,x16,x11                                        Fe De Ex Me Wb
+    lw	 x11,8(x11)                                            Fe De Ex Me Wb
+    slli x12,x4,2                                                 Fe De Ex Me Wb
+    add	 x12,x17,x12                                                 Fe De Ex Me Wb
+    sw   x11,0(x12)                                                     Fe De Ex Me Wb
+    bge  x9,x4,Loop                                                        Fe De Ex Me Wb
+    andet kode...                                                                   Fe De Ex Me Wb
+
+2-vejs superskalar med branch prediction, hvor første hop er forudsagt baglæns og taget, og andet er forudsagt baglæns men ikke taget.
+
+                         0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19
+loop:
+    addi x4,x4,1        Fe De Ex Me Wb
+    slli x11,x4,5       Fe De >> Ex Me Wb                                       depend(Ex, x4)
+    add  x11,x16,x11       Fe De >> Ex Me Wb                                    depend(Ex, x11)
+    lw   x11,8(x11)        Fe >> De >> Ex Me Wb                                 depend(Ex, x11)
+    slli x12,x4,2             Fe >> De Ex Me Wb                 
+    add  x12,x17,x12          >> Fe >> De Ex Me Wb                              depend(Ex, x12)
+    sw   x11,0(x12)              >> Fe De >> Ex Me Wb                           depend(Ex, x12)
+    bge  x9,x4,Loop                 >> Fe De Ex Me Wb
+loop:
+    addi x4,x4,1                             Fe De Ex Me Wb         
+    slli x11,x4,5                            Fe De >> Ex Me Wb                  depend(Ex, x4)
+    add  x11,x16,x11                            Fe De >> Ex Me Wb               depend(Ex, x11)
+    lw   x11,8(x11)                             Fe >> De >> Ex Me Wb            depend(Ex, x11)
+    slli x12,x4,2                                  Fe >> De Ex Me Wb
+    add  x12,x17,x12                               >> Fe >> De Ex Me Wb         depend(Ex, x12)
+    sw   x11,0(x12)                                   >> Fe De >> Ex Me Wb      depend(Ex, x12)
+    bge  x9,x4,Loop                                      >> Fe De Ex Me Wb
+    ...andet kode                                                    Fe De Ex Me Wb
