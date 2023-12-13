@@ -35,7 +35,7 @@ loop:
 
 2-vejs superskalar med branch prediction, hvor første hop er forudsagt baglæns og taget, og andet er forudsagt baglæns men ikke taget.
 
-    		             0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19
+                         0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19
 loop:
     addi x4,x4,1	    Fe De Ex Me Wb
     slli x11,x4,5	    Fe De >> Ex Me Wb			                            depend(Ex, x4)
