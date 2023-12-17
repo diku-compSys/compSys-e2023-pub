@@ -1,5 +1,6 @@
 #include "lib.h"
 
+// Nodes in a radix tree.
 struct node;
 struct leaf { int count_zero; int count_one; };
 struct interior { struct node* zero; struct node* one; };
@@ -14,19 +15,26 @@ struct node* tree = NULL;
 #define MAX_BITS 1<<30
 
 // Note: bit_pos is one-hot encoded bit positions
+// all bits below bit_pos is set
 inline int lower_bits(int bit_pos) { return bit_pos - 1; }
+// all bits above bit_pos is set
 inline int higher_bits(int bit_pos) { return 0 - bit_pos - bit_pos; }
+// all bits higher than or equal to bit_pos is set
 inline int not_lower_bits(int bit_pos) { return ~lower_bits(bit_pos); }
+// all bits lower than or equal to bit_pos is set
 inline int not_higher_bits(int bit_pos) { return ~higher_bits(bit_pos); }
 // range including high pos, but excluding low pos
 inline int bit_range(int bit_pos_high, int bit_pos_low) { return (higher_bits(bit_pos_low) & not_higher_bits(bit_pos_high)); }
 
+
+// Add a number to the radix tree
 void add_number(int number) {
   struct node** parent = &tree;
+  // Tree may branch on each bit, starting from the most significant.
   for (int bit_pos = MAX_BITS; bit_pos >= 1; bit_pos >>= 1) {
     struct node* nptr = *parent;
     if (nptr == NULL) {
-      // create a leaf
+      // subtree does not exist. create a leaf:
       nptr = allocate(sizeof(struct node));
       *parent = nptr;
       nptr->bit_pos = 1;
@@ -39,6 +47,8 @@ void add_number(int number) {
       int mask = bit_range(bit_pos, nptr->bit_pos);
       int diff = mask & (number ^ nptr->number);
       if (diff) {
+        // the value being inserted differ from the values in the subtree
+        // we need to inject a node above the subtree to represent this difference
         // locate most significant differing bit (there must be one)
         while ((bit_pos & diff) == 0) { bit_pos >>= 1; };
         // inject an interior node for branching at bit_pos, above the earlier found subtree
@@ -61,12 +71,14 @@ void add_number(int number) {
       bit_pos = nptr->bit_pos;
     }
     if (bit_pos > 1) {
+      // descend into subtree
       if (bit_pos & number)
         parent = & nptr->interior.one;
       else
         parent = & nptr->interior.zero;
     }
     else {
+      // add number at leaf
       if (number & 1)
         nptr->leaf.count_one++;
       else
@@ -75,10 +87,13 @@ void add_number(int number) {
   }
 }
 
+// Take out members of subtree. Fill into 'buffer' until we reach 'end' of it
 int* take_numbers_2(struct node** parent, int* buffer, int* end) {
   struct node* nptr = *parent;
   if (nptr) {
+    // we have a node:
     if (nptr->bit_pos == 1) {
+      // it's a leaf node. Take numbers.
       while (buffer < end && nptr->leaf.count_zero) {
         *buffer++ = nptr->number & ~1;
         nptr->leaf.count_zero--;
@@ -87,15 +102,16 @@ int* take_numbers_2(struct node** parent, int* buffer, int* end) {
         *buffer++ = nptr->number | 1;
         nptr->leaf.count_one--;
       }
-      // remove "empty" node
+      // if the leaf node is now "empty" it must be remove:
       if (nptr->leaf.count_zero == 0 && nptr->leaf.count_one == 0) {
         release(nptr);
         *parent = NULL;
       }
     } else {
+      // it's an interior node. Take from subtrees:
       buffer = take_numbers_2(& nptr->interior.zero, buffer, end);
       buffer = take_numbers_2(& nptr->interior.one, buffer, end);
-      // remove node without subnodes
+      // if both subtrees have been removed, remove this node as well
       if (nptr->interior.zero == NULL && nptr->interior.one == NULL) {
         release(nptr);
         *parent = NULL;
@@ -105,10 +121,13 @@ int* take_numbers_2(struct node** parent, int* buffer, int* end) {
   return buffer;
 }
 
+// take 'max_nums' numbers from the tree and put them in 'buffer'
+// return the number of numbers taken.
 int take_numbers(int* buffer, int max_nums) {
   return take_numbers_2(& tree, buffer, buffer + max_nums) - buffer;
 }
 
+// Release all nodes in the tree
 void release_tree(struct node* tree) {
   if (tree) {
     if (tree->bit_pos > 1) {
@@ -133,18 +152,24 @@ void main(int argc, char* argv[]) {
   if (out_file < 0) {
     print_string("Could not open output file\n");
   }
+  // process numbers
   while (1) {
     int numbers[100];
     int out_numbers[100];
+    // read numbers until we don't get more
     int read = read_int_buffer(in_file, numbers, 100);
     if (read <= 0) break;
+    // process numbers read, one at a time
     for (int n = 0; n < read; ++n) {
       if (numbers[n] < 0) {
+        // negative number -N means take(N):
         int limit = -numbers[n];
         while (limit > 0) {
+          // take, then output up till 100 numbers at a time
           int take_max = limit < 100 ? limit : 100;
           int taken = take_numbers(out_numbers, take_max);
           int to_write = taken;
+          // output numbers:
           while (to_write > 0) {
             int written = write_int_buffer(out_file, out_numbers, to_write);
             to_write -= written;
@@ -154,10 +179,12 @@ void main(int argc, char* argv[]) {
             break;
         }
       } else {
+        // a positive number is just added
         add_number(numbers[n]);
       }
     }
   }
+  // done. Cleanup nicely, please.
   close_file(in_file);
   close_file(out_file);
   release_tree(tree);
