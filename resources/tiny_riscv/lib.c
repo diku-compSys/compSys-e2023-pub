@@ -39,6 +39,44 @@ void terminate(int status) {
   // never returns (stops machine)
 }
 
+int read_int_buffer(int file, int* buffer, int max_size) {
+  int retval;
+  asm volatile("  mv a0,%0" : : "r" (file) : "a0");
+  asm volatile("  mv a1,%0" : : "r" (buffer) : "a1");
+  asm volatile("  mv a2,%0" : : "r" (max_size) : "a2");
+  asm volatile("  li a7,4" : : : "a7");
+  asm volatile("  ecall" : : : "a0");
+  asm volatile("  mv %0,a0" : "=r" (retval));
+}
+
+int write_int_buffer(int file, int* buffer, int size) {
+  int retval;
+  asm volatile("  mv a0,%0" : : "r" (file) : "a0");
+  asm volatile("  mv a1,%0" : : "r" (buffer) : "a1");
+  asm volatile("  mv a2,%0" : : "r" (size) : "a2");
+  asm volatile("  li a7,5" : : : "a7");
+  asm volatile("  ecall" : : : "a0");
+  asm volatile("  mv %0,a0" : "=r" (retval));
+}
+
+int open_file(char* path, char* flags) {
+  int retval;
+  asm volatile("  mv a0,%0" : : "r" (path) : "a0");
+  asm volatile("  mv a1,%0" : : "r" (flags) : "a1");
+  asm volatile("  li a7,6" : : : "a7");
+  asm volatile("  ecall" : : : "a0");
+  asm volatile("  mv %0,a0" : "=r" (retval));
+}
+
+int close_file(int file) {
+  int retval;
+  asm volatile("  mv a0,%0" : : "r" (file) : "a0");
+  asm volatile("  li a7,6" : : : "a7");
+  asm volatile("  ecall" : : : "a0");
+  asm volatile("  mv %0,a0" : "=r" (retval));
+}
+
+
 void print_string(const char* p) {
   while (*p) { outp(*p++); };
 }
@@ -107,7 +145,7 @@ void init_heap(void* heap_start) {
 
 void* allocate(int size) {
   if (!initialized) {
-    initialized = 0;
+    initialized = 1;
     for (int j = 0; j < NUM_SIZES; j++) small_block_headers[j] = NULL;
   }
   if (size < 1) return NULL;
