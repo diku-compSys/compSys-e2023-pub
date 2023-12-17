@@ -1,0 +1,18 @@
+
+assembly.riscv:     file format elf32-littleriscv
+
+Contents of section .text:
+ 10054 13054006 93683000 73000000           ..@..h0.s...    
+Contents of section .riscv.attributes:
+ 0000 411e0000 00726973 63760001 14000000  A....riscv......
+ 0010 05727633 32693270 305f6d32 703000    .rv32i2p0_m2p0. 
+
+assembly.riscv:     file format elf32-littleriscv
+
+
+Disassembly of section .text:
+
+00010054 <_start>:
+   10054:	06400513          	li	a0,100
+   10058:	00306893          	ori	a7,zero,3
+   1005c:	00000073          	ecall

@@ -1,5 +1,7 @@
 # Afviklingsplot og Mikroarkitektur
 
+Opdateret 9. december 2023 med rettelse af "Mm" til "Me" for at matche tidligere introduceret notation.
+
 Opdateret 15. januar 2023 med rettelse af indrykning i svar til øvelse 2.
 
 Opdateret 15. januar 2023 med rettelse af dependencies for superskalar i afsnittet om afkoblet prefetcher.

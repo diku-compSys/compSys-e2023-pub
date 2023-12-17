@@ -1,4 +1,6 @@
-# Eksamensrettede øvelser i mikroarkitektur og afviklingsplot
+
+# Løsninger til øvelser 13. december
+
 
 ## Opgave 1
 
@@ -17,7 +19,7 @@ Nedenfor ses to iterationer af en løkke-krop udført på en 2-vejs out-of-order
     slli x12,x4,2             Fa Fb Fc De Fu Al Rn Qu pk rd ex wb -- -- -- -- Ca Cb
     add  x12,x17,x12          Fa Fb Fc De Fu Al Rn Qu -- pk rd ex wb -- -- -- -- Ca Cb
     sw   x11,0(x12)              Fa Fb Fc De Fu Al Rn Qu -- pk rd ag ma mb mc -- Ca Cb
-    -                                                 Q* -- -- -- -- pk rd st -- C*
+    -                                                 Qu -- -- -- -- pk rd st
     bge  x9,x4,Loop              Fa Fb Fc De Fu Al Rn Qu pk rd ex -- -- -- -- -- -- Ca Cb
     addi x4,x4,1                    Fa Fb Fc De Fu Al Rn Qu pk rd ex wb -- -- -- -- Ca Cb
     slli x11,x4,5                   Fa Fb Fc De Fu Al Rn Qu -- pk rd ex wb -- -- -- -- Ca Cb
@@ -26,7 +28,7 @@ Nedenfor ses to iterationer af en løkke-krop udført på en 2-vejs out-of-order
     slli x12,x4,2                         Fa Fb Fc De Fu Al Rn Qu pk rd ex wb -- -- -- -- Ca Cb
     add  x12,x17,x12                      Fa Fb Fc De Fu Al Rn Qu -- pk rd ex wb -- -- -- -- Ca Cb
     sw   x11,0(x12)                          Fa Fb Fc De Fu Al Rn Qu -- pk rd ag ma mb mc -- Ca Cb
-    -                                                             Q* -- -- -- -- pk rd st -- C*
+    -                                                             Qu -- -- -- -- pk rd st
     bge  x9,x4,Loop                          Fa Fb Fc De Fu Al Rn Qu pk rd ex -- -- -- -- -- -- Ca Cb
 
 Bemærk at store instruktioner opsplittes i to (cache opslag og data skrivning til skrive-kø)
@@ -76,27 +78,23 @@ Nedenfor ses to iterationer af den samme løkke-krop på en 4-vejs out-of-order 
     slli x12,x4,2          Fa Fb Fc De Fu Al Rn Qu pk rd ex wb -- -- -- -- -- Ca Cb
     add  x12,x17,x12       Fa Fb Fc De Fu Al Rn Qu -- pk rd ex wb -- -- -- -- Ca Cb
     sw   x11,0(x12)        Fa Fb Fc De Fu Al Rn Qu -- -- pk rd ag ma mb mc -- Ca Cb
-    -                                           Q* -- -- -- -- -- -- pk rd st C*
-    bge  x9,x4,Loop        Fa Fb Fc De Fu Al Rn Qu pk rd ex -- -- -- -- -- -- -- Ca Cb
+    -                                           Qu -- -- -- -- -- -- pk rd st
+    bge  x9,x4,Loop        Fa Fb Fc De Fu Al Rn >> Qu pk rd ex -- -- -- -- -- -- Ca Cb
     addi x4,x4,1              Fa Fb Fc De Fu Al Rn Qu pk rd ex wb -- -- -- -- -- Ca Cb
     slli x11,x4,5             Fa Fb Fc De Fu Al Rn Qu -- pk rd ex wb -- -- -- -- Ca Cb
     add  x11,x16,x11          Fa Fb Fc De Fu Al Rn Qu -- -- pk rd ex wb -- -- -- Ca Cb
-    lw   x11,8(x11)           Fa Fb Fc De Fu Al Rn Qu -- -- -- pk rd ag ma mb mc wb Ca Cb
-    slli x12,x4,2                Fa Fb Fc De Fu Al Rn Qu pk rd ex wb -- -- -- -- -- Ca Cb
-    add  x12,x17,x12             Fa Fb Fc De Fu Al Rn Qu -- pk rd ex wb -- -- -- -- Ca Cb
-    sw   x11,0(x12)              Fa Fb Fc De Fu Al Rn Qu -- -- pk rd ag ma mb mc -- Ca Cb
-    -                                                 Q* -- -- -- -- -- -- pk rd st C*
-    bge  x9,x4,Loop              Fa Fb Fc De Fu Al Rn Qu pk rd ex -- -- -- -- -- -- -- Ca Cb
+    lw   x11,8(x11)           Fa Fb Fc De Fu Al Rn >> Qu -- -- -- pk rd ag ma mb mc wb Ca Cb
+    slli x12,x4,2                Fa Fb Fc De Fu Al Rn Qu pk rd ex wb -- -- -- -- -- -- Ca Cb
+    add  x12,x17,x12             Fa Fb Fc De Fu Al Rn Qu -- pk rd ex wb -- -- -- -- -- Ca Cb
+    sw   x11,0(x12)              Fa Fb Fc De Fu Al Rn Qu -- -- pk rd ag ma mb mc -- -- Ca Cb
+    -                                                    Qu -- -- -- -- -- -- pk rd st
+    bge  x9,x4,Loop              Fa Fb Fc De Fu Al Rn >> Qu pk rd ex -- -- -- -- -- -- -- Ca Cb
 
 ### Spg 1.3
 
 Hvad er IPC for 20 gennemløb af løkken?
 
 ### Svar 1.3
-
-Vi kan se at hver gennemløb koster 2 clock cykler (Fa, Qu og Ca forskydes alle 2 clock cykler),
-så 20 gennemløb koster 40 clock. Fejlforudsigelsen koster det samme som i tidligere svar (10 cycles).
-Samlet IPC = 160/50 = 16/5 = 3.2
 
 Vi kan se at hver gennemløb koster 2 clock cykler (Fa, Qu og Ca forskydes alle 2 clock cykler),
 så 20 gennemløb koster 40 clock. Fejlforudsigelsen koster det samme som i tidligere svar (10 cycles).
@@ -115,7 +113,7 @@ med max 3 cache tilgange pr clock
     slli x12,x4,2       Fa Fb Fc De Fu Al Rn Qu -- pk rd ex wb -- -- -- -- -- Ca Cb
     add  x12,x17,x12    Fa Fb Fc De Fu Al Rn Qu -- -- pk rd ex wb -- -- -- -- Ca Cb
     sw   x11,0(x12)     Fa Fb Fc De Fu Al Rn Qu -- -- -- pk rd ag ma mb mc -- Ca Cb
-    -                                        Q* -- -- -- -- -- -- -- pk rd st C*
+    -                                        Qu -- -- -- -- -- -- -- pk rd st
     bge  x9,x4,Loop     Fa Fb Fc De Fu Al Rn Qu -- pk rd ex -- -- -- -- -- -- Ca Cb
     addi x4,x4,1           Fa Fb Fc De Fu Al Rn Qu pk rd ex wb -- -- -- -- -- Ca Cb
     slli x11,x4,5          Fa Fb Fc De Fu Al Rn Qu -- pk rd ex wb -- -- -- -- Ca Cb
@@ -124,7 +122,7 @@ med max 3 cache tilgange pr clock
     slli x12,x4,2          Fa Fb Fc De Fu Al Rn Qu -- pk rd ex wb -- -- -- -- -- Ca Cb
     add  x12,x17,x12       Fa Fb Fc De Fu Al Rn Qu -- -- pk rd ex wb -- -- -- -- Ca Cb
     sw   x11,0(x12)        Fa Fb Fc De Fu Al Rn Qu -- -- -- pk rd ag ma mb mc -- Ca Cb
-    -                                           Q* -- -- -- -- -- -- -- pk rd st C*
+    -                                           Qu -- -- -- -- -- -- -- pk rd st
     bge  x9,x4,Loop        Fa Fb Fc De Fu Al Rn Qu -- pk rd ex -- -- -- -- -- -- Ca Cb
 
 ### Spg 1.4
@@ -156,111 +154,118 @@ på mindre end 1 cyclus. IPC bliver således som beregnet i 1.4
 Det er ikke nødvendigt at opstille et afviklingsplot.
 
 
+
+
 ## Opgave 2
 
-De følgende spørgsmål handler om hvorden nedenstående instruktionssekvens afvikles
-på forskellige mikroarkitekturer.
+Opstil en risc-v kodesekvens:
+
+ * hvor en load der følger efter en store tilgår samme adresse og derfor skal "se" data fra store instruktionen
+ * hvor store data endnu ikke er tilgængelig i store-køen på det tidspunkt, hvor load instruktionen skal bruge det
+
+diskuter/opstil/giv en mere præcis definition af det sidste af disse to krav.
+
+## Svar 2
+
+Opgaven kræver ikke opstilling af et afviklingsplot, men det gør diskussionen nemmere:
+(her for en 2-vejs med 1 opslag i cache pr clock)
 
 ~~~
-Loop:   addi x4,x4,4
-        addi x6,x6,4
-        subi x7,x7,1
-        lw   x8,0(x4)
-        sw   x8,0(x5)
-        bne  x7,x9,Loop
-Loop:   addi x4,x4,4
-        addi x6,x6,4
-        subi x7,x7,1
-        lw   x8,0(x4)
-        sw   x8,0(x5)
-        bne  x7,x9,Loop
+lw  x3,0(x4)   Fa Fb Fc De Fu Al Rn Qu pk rd ag ma mb mc wb Ca Cb
+lw  x2,0(x3)   Fa Fb Fc De Fu Al Rn Qu -- -- -- -- pk rd ag ma mb mc wb Ca Cb
+sw  x2,0(x5)      Fa Fb Fc De Fu Al Rn Qu pk rd ag ma mb mc -- -- -- -- Ca Cb
+-                                      Qu -- -- -- -- -- -- -- pk rd st Ca Cb
+lw  x3,0(x5)      Fa Fb Fc De Fu Al Rn Qu -- pk rd ag ma mb mc -- -- -- wb Ca Cb
 ~~~
 
-Angiv for hvert spørgsmål eventulle antagelser du gør for at besvare spørgsmålet
+Det spørgsmål som kunne diskuteres er hvor sent data kunne ankomme til store-køen
+og stadig forwardes af den afhængige load instruktion i tide.
 
-### Spg 2.1
-
-Opstil et afviklingsplot for en simpel 5-trins pipeline med fuld forwarding som beskrevet
-i COD.
-
-### Svar 2.1
-
-Vi antager
-
- * At hop forudsiges taget i De.
- * At load data kan forwardes fra starten af Wb til store i Me
-
-~~~
-Loop:   addi x4,x4,4            Fe De Ex Mm Wb
-        addi x6,x6,4               Fe De Ex Mm Wb
-        subi x7,x7,1                  Fe De Ex Mm Wb
-        lw   x8,0(x4)                    Fe De Ex Mm Wb
-        sw   x8,0(x5)                       Fe De Ex Mm Wb
-        bne  x7,x9,Loop                        Fe De Ex Mm Wb
-Loop:   addi x4,x4,4                                 Fe De Ex Mm Wb
-        addi x6,x6,4                                    Fe De Ex Mm Wb
-        subi x7,x7,1                                       Fe De Ex Mm Wb
-        lw   x8,0(x4)                                         Fe De Ex Mm Wb
-        sw   x8,0(x5)                                            Fe De Ex Mm Wb
-        bne  x7,x9,Loop                                             Fe De Ex Mm Wb
-~~~
+I noten om afviklingsplot ser det ud til at "wb" kan finde sted umiddelbart efter "st",
+som er der, hvor værdien skrives til store-køen, så det kan fungere som præcis definition.
+Det beskrives dog ikke præcis hvordan dette tænkes opnået.
 
 
-### Spg 2.2
 
-Opstil et afviklingsplot for en 2-vejs superskalar med single-cycle tilgang til cache
-som beskrevet først i afsnittet om superskalar mikroarkitektur i noten om afviklingsplot
+## Opgave 3
 
-### Svar 2.2
+### Spg 1
 
-Vi antager
+Opstil en risc-v kodesekvens:
 
- * At bagudgående hop forudsiges taget i De.
+ * hvor en load der følger efter en store tilgår samme adresse og derfor skal "se" data fra store instruktionen
+ * hvor store addressen endnu ikke er tilgængelig i store-køen på det tidspunkt, hvor load instruktionen har brug
+   for at sammenligne addresser.
+
+diskuter/opstil/giv en mere præcis definition af det sidste af disse to krav.
+
+### Svar 3.1
+
+Det er ikke nødvendigt at opstille et afviklingsplot - tilstrækkeligt at angive
+de tre instruktioner nedenfor, men....
 
 ~~~
-Loop:   addi x4,x4,4            Fe De Ex Wb
-        addi x6,x6,4            Fe De Ex Wb
-        subi x7,x7,1               Fe De Ex Wb
-        lw   x8,0(x4)              Fe De Ag Mm Wb
-        sw   x8,0(x5)                 Fe De Ag Mm
-        bne  x7,x9,Loop               Fe De Ex Wb
-Loop:   addi x4,x4,4                        Fe De Ex Wb
-        addi x6,x6,4                        Fe De Ex Wb
-        subi x7,x7,1                           Fe De Ex Wb
-        lw   x8,0(x4)                          Fe De Ag Mm Wb
-        sw   x8,0(x5)                             Fe De Ag Mm
-        bne  x7,x9,Loop                           Fe De Ex Wb
+lw  x3,0(x4)   Fa Fb Fc De Fu Al Rn Qu pk rd ag ma mb mc wb Ca Cb
+sw  x2,0(x3)   Fa Fb Fc De Fu Al Rn Qu -- -- -- -- pk rd ag ma mb mc Ca Cb
+-                                   Qu pk rd st -- -- -- -- -- -- -- Ca Cb
+lw  x3,0(x5)      Fa Fb Fc De Fu Al Rn Qu pk rd ag ma mb mc -- -- -- wb Ca Cb
 ~~~
 
+Det spørgsmål som kunne diskuteres er hvor sent adressen kunne ankomme til store-køen
+og stadig "ses" af den senere load, som enten skal forwarde data fra store-køen
+eller fra datacachen alt afhængig af adressen.
 
-### Spg 2.3
+Så en rimelig antagelse ville være at en tidligere store skal have fuldført "ag" før at
+en senere load udfører "ag" for den senere load-instruktion kan "se" store instruktionens addresse.
 
-Opstil et afviklingsplot for en 4-vejs out-of-order mikroarkitektur med realistisk
-(3-trins pipelined) adgang til cache som beskrevet i afsnittet om out-of-order
-mikroarkitektur i noten om afviklingsplot.
+### Spg 2
 
-### Svar 2.3
+Opstil et afviklingsplot som illustrerer ovenstående på en 4-vejs out-of-order mikroarkitektur med en
+cache tilgang pr clock. Diskuter evt hvornår load instruktionen tidligst kan gennemføre et writeback.
 
-Vi antager:
-
- * Korrekt forudsigelse af hop som beskrevet i noten
- * Max to cache tilgange pr clock.
+### Svar 3.2
 
 ~~~
-Loop:   addi x4,x4,4            Fa Fb Fc De Fu Al Rn Qu pk rd ex wb Ca Cb
-        addi x6,x6,4            Fa Fb Fc De Fu Al Rn Qu pk rd ex wb Ca Cb
-        subi x7,x7,1            Fa Fb Fc De Fu Al Rn Qu pk rd ex wb Ca Cb
-        lw   x8,0(x4)           Fa Fb Fc De Fu Al Rn Qu -- pk rd ag ma mb mc wb Ca Cb
-        sw   x8,0(x5)              Fa Fb Fc De Fu Al Rn Qu pk rd ag ma mb mc -- Ca Cb
-        -                                               Q* -- -- -- -- pk rd st C*
-        bne  x7,x9,Loop            Fa Fb Fc De Fu Al Rn Qu pk rd ex -- -- -- -- Ca Cb
-Loop:   addi x4,x4,4                  Fa Fb Fc De Fu Al Rn Qu pk rd ex wb -- -- Ca Cb
-        addi x6,x6,4                  Fa Fb Fc De Fu Al Rn Qu pk rd ex wb -- -- -- Ca Cb
-        subi x7,x7,1                  Fa Fb Fc De Fu Al Rn Qu pk rd ex wb -- -- -- Ca Cb
-        lw   x8,0(x4)                 Fa Fb Fc De Fu Al Rn Qu -- pk rd ag ma mb mc wb Ca Cb
-        sw   x8,0(x5)                    Fa Fb Fc De Fu Al Rn Qu pk rd ag ma mb mc -- Ca Cb
-        -                                                     Q* -- -- -- -- pk rd st C*
-        bne  x7,x9,Loop                  Fa Fb Fc De Fu Al Rn Qu pk rd ex -- -- -- -- Ca Cb
+lw  x3,0(x4)   Fa Fb Fc De Fu Al Rn Qu pk rd ag ma mb mc wb Ca Cb
+sw  x2,0(x3)   Fa Fb Fc De Fu Al Rn Qu -- -- -- -- pk rd ag ma mb mc Ca Cb
+-                                   Qu pk rd st -- -- -- -- -- -- -- Ca Cb
+lw  x3,0(x5)   Fa Fb Fc De Fu Al Rn Qu pk rd ag ma mb mc -- -- -- -- wb Ca Cb
 ~~~
+
+I noten om afviklingsplot ser det ud til at "wb" for en load kan finde sted umiddelbart efter "mc"
+for en tidligere store, hvilket er 3 clocks efter adresseberegningen for den tidligere store. 
+Det beskrives dog ikke præcis hvordan dette tænkes opnået.
+
+Man kan forestille sig at de tre clocks er krævet fordi der er mange adresser at sammenligne.
+
+
+### Spg 3
+
+I forlængelse af spg 2. Diskuter hvornår en instruktion som afhænger af load-instruktionen tidligst
+vil kunne begynde udførelse.
+
+
+### Svar 3.3
+
+Her er spørgsmålet hvor tidligt scheduleren kan nå at vække en afhængig instruktion.
+
+Betragt:
+
+~~~
+                                                         0  1  2  3  4  5
+sw  x2,0(x3)   Fa Fb Fc De Fu Al Rn Qu -- -- -- -- pk rd ag ma mb mc Ca Cb
+-                                   Qu pk rd st -- -- -- -- -- -- -- Ca Cb
+lw  x3,0(x5)   Fa Fb Fc De Fu Al Rn Qu pk rd ag ma mb mc -- -- -- -- wb Ca Cb
+add x3,x3,x7   Fa Fb Fc De Fu Al Rn Qu -- -- -- -- -- -- -- -- pk rd ex wb Ca Cb
+~~~
+
+Her beregnes adressen for den tidligere store-instruktion i cycle 0. Sammenligning med
+ventende load instruktioner kan tidligst ske fra begyndelsen af cycle 1. For at den sidste
+instruktion som er afhængig af load-instruktionen kan nå "ex" i cycle 4 skal scheduleren
+udvælge den i cycle 2. Det virker lovlig optimistisk, men matcher eksempler fra
+forelæsningsslides. Vi kender ikke det korrekte svar, men det ville ikke overraske,
+hvis add instruktionen ville være forsinket yderligere et par cycles i forhold til ovenstående
+afviklingsplot.
+
 
 

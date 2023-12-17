@@ -16,7 +16,16 @@ Copy all files in that directory to where you want to work with them.
 
 It currently refers to "./gcc" for the cross compiler and
 "./objdump" for the objdump utility. You need to changes this to
-match your installation.
+match your installation. As an example, the makefile on Mac may look like the following (depending on where you have installed the RISCV-gnu-toolchain):
+
+```makefile
+%.riscv: %.c lib.c Makefile
+	/usr/local/opt/riscv-gnu-toolchain/bin/riscv64-unknown-elf-gcc  -march=rv32im -mabi=ilp32 -fno-tree-loop-distribute-patterns -mno-relax -O1 $< lib.c -static -nostartfiles -nostdlib -o $@
+
+%.dis: %.riscv Makefile
+	/usr/local/opt/riscv-gnu-toolchain/bin/riscv64-unknown-elf-objdump -s -w $< > $@
+	/usr/local/opt/riscv-gnu-toolchain/bin/riscv64-unknown-elf-objdump -S $< >> $@
+```
 
 Use this to translate fib.c into a disassembled riscv format (.dis)
 by runnning "make fib.dis"
@@ -35,8 +44,7 @@ for each of these 3 optimization levels. Compare them against each other. Which 
 6. Find and install our own riscv simulator.
 
 You'll find this in our public repo in the directory "tools/simulator".
-There should be one for linux, one macOS on ia64 and one for macOS on
-m1. Copy the one that matches your machine.
+There should be one for linux and one for macOS (even though it is for x86, it works on M1). Copy the one that matches your machine.
 
 Use the simulator to run your 3 variants of fib and find out how many
 instructions it takes to run each variant with the same input.
@@ -47,3 +55,17 @@ Check the source code in fib.c to discover how it gets its input.
 Perhaps break it up and ask chatgpt to explain the fragments one by one.
 Be critical.
 
+8. Write your own C program
+
+Try to use some of the facilities, for example input/output.
+
+Take a look at hello.c, fib.c or echo.c for inspiration.
+
+If you're really ambitious, try to build something which uses the dynamic memory
+management  as well (allocate/release).
+
+When things go wrong it is insanely difficult to find out why.
+
+ * You can use the logging facility to see how far in the execution you got.
+ * Best approach to debugging is to put in print_string() calls at the right
+   places in your program.

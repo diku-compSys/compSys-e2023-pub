@@ -5,10 +5,10 @@ fuld forwarding svarende til beskrivelsen i [COD p. 317] (det er ikke det samme 
 
 ~~~
                         0  1  2  3  4  5  6  7  8
-lw   x11,0(x10)         Fe De Ex Mm Wb
-addi x11,x11,100           Fe De De Ex Mm Wb
-sw   x11,0(x14)               Fe Fe De Ex Mm Wb
-addi x10,x10,1                      Fe De Ex Mm Wb
+lw   x11,0(x10)         Fe De Ex Me Wb
+addi x11,x11,100           Fe De De Ex Me Wb
+sw   x11,0(x14)               Fe Fe De Ex Me Wb
+addi x10,x10,1                      Fe De Ex Me Wb
 ~~~
 
 Instruktionerne står til venstre, en per linie, og programmet afvikles oppefra og ned. 
@@ -23,7 +23,7 @@ I diagrammet angives følgende fem aktiviter:
 Fe - Instruktionshentning (fetch)
 De - Instruktionsafkodning (decode)
 Ex - Udførelse af aritmetik (execute)
-Mm - Tilgang til lager hvis load eller store (memory)
+Me - Tilgang til lager hvis load eller store (memory)
 Wb - Opdatering af registre med resultat (writeback)
 ~~~
 
@@ -35,7 +35,7 @@ aktiviteter til klasser af instruktioner.
 I pipelinen i COD er flowet simpelt:
 
 ~~~
-alle: "Fe De Ex Mm Wb"
+alle: "Fe De Ex Me Wb"
 ~~~
 
 I en simpel pipeline har alle instruktioner samme flow gennem pipelinen.
@@ -47,17 +47,17 @@ samme aktivitet på samme tidspunkt. For den simple pipeline angives ressourcebe
 ved
 
 ~~~
-Fe: 1, De: 1, Ex: 1, Mm: 1, Wb: 1
+Fe: 1, De: 1, Ex: 1, Me: 1, Wb: 1
 ~~~
 
 Betragt vort tidligere eksempel igen:
 
 ~~~
                         0  1  2  3  4  5  6  7  8
-lw   x11,0(x10)         Fe De Ex Mm Wb
-addi x11,x11,100           Fe De De Ex Mm Wb
-sw   x11,0(x14)               Fe Fe De Ex Mm Wb
-addi x10,x10,1                      Fe De Ex Mm Wb
+lw   x11,0(x10)         Fe De Ex Me Wb
+addi x11,x11,100           Fe De De Ex Me Wb
+sw   x11,0(x14)               Fe Fe De Ex Me Wb
+addi x10,x10,1                      Fe De Ex Me Wb
 ~~~
 
 Instruktion nr 2 er udsat for et "stall" - den kan ikke fuldføre aktiviteten "De" 
@@ -72,24 +72,24 @@ derfor har brug for et pipeline-trin til det formål, men da alle instruktioner
 tvinges igennem dette pipeline-trin kan man vælge at ignorere det.
 
 I en mere kompliceret pipeline vil man opdele instruktionerne i flere klasser fordi 
-forskellige instruktioner har brug for forskellige ressourcer. En tænkt eksempel: 
+forskellige instruktioner har brug for forskellige ressourcer. Et tænkt eksempel: 
 en maskine hvor kun load og store har et pipeline-trin for lagertilgang, mens de 
 øvrige instruktioner kan gå direkte fra "Ex" til "Wb" - og "store" instruktioner 
 kan helt undvære Wb:
 
 ~~~
-load: "Fe De Ex Mm Wb"
-store: "Fe De Ex Mm"
+load: "Fe De Ex Me Wb"
+store: "Fe De Ex Me"
 andre: "Fe De Ex Wb"
-Fe: 1, De: 1, Ex: 1, Mm: 1, Wb: 1
+Fe: 1, De: 1, Ex: 1, Me: 1, Wb: 1
 ~~~
 På denne maskine får vi følgende afviklingsplot for kodestumpen fra tidligere:
 
 ~~~
                         0  1  2  3  4  5  6  7  8
-lw   x11,0(x10)         Fe De Ex Mm Wb
+lw   x11,0(x10)         Fe De Ex Me Wb
 addi x11,x11,100           Fe De De Ex Wb
-sw   x11,0(x14)               Fe Fe De Ex Mm
+sw   x11,0(x14)               Fe Fe De Ex Me
 addi x10,x10,1                      Fe De Ex Wb
 ~~~
 
@@ -98,9 +98,9 @@ det med ">>" fremfor med den relevante aktivitet:
 
 ~~~C
                         0  1  2  3  4  5  6  7  8
-lw   x11,0(x10)         Fe De Ex Mm Wb
+lw   x11,0(x10)         Fe De Ex Me Wb
 addi x11,x11,100           Fe >> De Ex Wb
-sw   x11,0(x14)               >> Fe De Ex Mm
+sw   x11,0(x14)               >> Fe De Ex Me
 addi x10,x10,1                      Fe De Ex Wb
 ~~~
 
@@ -116,8 +116,8 @@ bruger den her, hvis vi vil gøre det særligt nemt at se stall i diagrammet.
 Dataafhængigheder specificeres ved at angive hvilke aktiviteter der producerer og/eller afhænger af en værdi. Eksempel:
 
 ~~~
-load: "Fe De Ex Mm Wb"   depend(Ex,rs1), produce(Mm,rd)
-store: "Fe De Ex Mm"     depend(Ex,rs1), depend(Mm,rs2)
+load: "Fe De Ex Me Wb"   depend(Ex,rs1), produce(Me,rd)
+store: "Fe De Ex Me"     depend(Ex,rs1), depend(Me,rs2)
 andre: "Fe De Ex Wb"     depend(Ex,rs1), depend(Ex,rs2), produce(Ex,rd)
 ~~~
 Her refererer "rs1", "rs2" og "rd" til de to kilderegistre og destinationsregisteret på samme måde som på den grønne side forrest i COD.
@@ -128,17 +128,17 @@ Ovenstående specifikation svarer til en pipeline med fuld forwarding og vil res
 Vi kan beskrive en pipeline helt uden forwarding således:
 
 ~~~
-load: "Fe De Ex Mm Wb"   depend(Ex,rs1), produce(Wb,rd)
-store: "Fe De Ex Mm"     depend(Ex,rs1), depend(Ex,rs2)
+load: "Fe De Ex Me Wb"   depend(Ex,rs1), produce(Wb,rd)
+store: "Fe De Ex Me"     depend(Ex,rs1), depend(Ex,rs2)
 andre: "Fe De Ex Wb"     depend(Ex,rs1), depend(Ex,rs2), produce(Wb,rd)
 ~~~
 Hvilket giver anledning til dette afviklingsplot:
 
 ~~~
                         0  1  2  3  4  5  6  7  8  9
-lw   x11,0(x10)         Fe De Ex Mm Wb                  produce x11 i Wb i cyklus 4
+lw   x11,0(x10)         Fe De Ex Me Wb                  produce x11 i Wb i cyklus 4
 addi x11,x11,100           Fe >> >> De Ex Wb            depend x11 i Ex i cyklus 5, produce x11 i Wb i cyklus 6
-sw   x11,0(x14)               >> >> Fe >> De Ex Mm      depend x11 i Ex i cyklus 7
+sw   x11,0(x14)               >> >> Fe >> De Ex Me      depend x11 i Ex i cyklus 7
 addi x10,x10,1                         >> Fe De Ex Wb
 ~~~
 
@@ -177,11 +177,11 @@ Her er en sekvens af instruktioner med to hop bagud, det første tages, det ande
 ~~~
                                 0  1  2  3  4  5  6  7  8  9  10 11 12 13 14 15
 0:      addi    x11,x11,4       Fe De Ex Wb
-4:      lw      x12,0(x11)         Fe De Ex Mm Wb
+4:      lw      x12,0(x11)         Fe De Ex Me Wb
 8:      add     x13,x13,x12           Fe >> De Ex Wb
 C:      bne     x11,x15,0                >> Fe De Ex            <-- NB: Betingede hop behøver ikke Wb
 0:      addi    x11,x11,4                         Fe De Ex Wb
-4:      lw      x12,0(x11)                           Fe De Ex Mm Wb
+4:      lw      x12,0(x11)                           Fe De Ex Me Wb
 8:      add     x13,x13,x12                             Fe >> De Ex Wb
 C:      bne     x11,x15,0                                  >> Fe De Ex
 10:     et-eller-andet                                                 Fe De Ex ...
