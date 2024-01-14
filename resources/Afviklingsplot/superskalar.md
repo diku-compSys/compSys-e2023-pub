@@ -97,7 +97,7 @@ Gevinsten kan ses af følgende plot, hvor vi har udrullet løkken fra tidligere:
 4:     addi x11,x11,4           Fe De Ex Wb
 8:     sw   x12,0(x10)             Fe De Ag Me
 C:     addi x10,x10,4              Fe De Ex Wb
-10:    beq  x11,x15,0                 Fe De Ex
+10:    beq  x11,x15,LoopExit          Fe De Ex
 14:    lw   x12,0(x11)                Fe De Ag Me Wb
 18:    addi x11,x11,4                    Fe De Ex Wb
 1C:    sw   x12,0(x10)                   Fe De Ag Me
@@ -121,20 +121,20 @@ Denne form for mikroarkitektur siges at have "afkoblet prefetching" (eller "aggr
 Her er et eksempel på specifikationen af sådan en maskine:
 
 ~~~Text
-load:          "Fe Pr Qu De Ex Me Wb"  depend(Ex,rs1), produce(Me,rd)
-store:         "Fe Pr Qu De Ex Me"     depend(Ex,rs1), depend(Me,rs2)
+load:          "Fe Pr Qu De Ag Me Wb"  depend(Ag,rs1), produce(Me,rd)
+store:         "Fe Pr Qu De Ag Me"     depend(Ag,rs1), depend(Me,rs2)
 ubetinget hop: "Fe Pr"                 -
 betinget hop:  "Fe Pr Qu De Ex"        depend(Ex,rs1), depend(Ex,rs2)
-kald:          "Fe Pr Qu De Ex"        produce(Ex,rd)
+kald:          "Fe Pr Qu De Ex wb"     produce(Ex,rd)
 retur:         "Fe Pr Qu De Ex"        depend(Ex,rs1)
 andre:         "Fe Pr Qu De Ex Wb"     depend(Ex,rs1), depend(Ex,rs2), produce(Ex,rd)
 
 ressourcer: Fe:4, Pr: 4, Qu:4, De:2, Ex:2, Ag:1, Me:1, Wb:2
 
-ubetinget hop:                    produce(Pq, Pc)
-kald:                             produce(Pq, Pc)
+ubetinget hop:                    produce(Pr, Pc)
+kald:                             produce(Pr, Pc)
 retur:                            produce(Ex, Pc)
-betinget hop baglæns taget:       produce(Pq, PC)
+betinget hop baglæns taget:       produce(Pr, PC)
 betinget hop baglæns ikke taget:  produce(Ex, PC)
 betinget hop forlæns taget:       produce(Ex, PC)
 betinget hop forlæns ikke taget:  -

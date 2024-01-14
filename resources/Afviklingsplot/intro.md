@@ -68,8 +68,8 @@ aktiviteten "Fe" to gange. (Vi vender tilbage til hvorfor instruktion nr 2 stall
 
 I en simpel pipeline er det praktisk at modellere det som om alle instruktioner 
 bruger de samme ressourcer. Vi ved godt at kun load og store tilgår lageret og 
-derfor har brug for et pipeline-trin til det formål, men da alle instruktioner 
-tvinges igennem dette pipeline-trin kan man vælge at ignorere det.
+derfor har brug for et pipeline-trin til det formål, men alle instruktioner 
+tvinges igennem det alligevel.
 
 I en mere kompliceret pipeline vil man opdele instruktionerne i flere klasser fordi 
 forskellige instruktioner har brug for forskellige ressourcer. Et tænkt eksempel: 
@@ -153,7 +153,9 @@ Eksempel:
 retur: produce(Ex, PC)
 alle: depend(Fe, PC)
 ~~~
-Angiver at PC opdateres i "Ex" af retur instruktionen og at efter en retur-instruktion kan maskinen tidligst gennemføre "Fe" (instruktionshentning) for efterfølgende instruktioner, når PC er opdateret. Den sidste regel for alle instruktioner: "depend(Fe, PC)" er så indlysende at vi ikke vil anføre den fremover.
+Angiver at PC opdateres i "Ex" af retur instruktionen og at efter en retur-instruktion kan maskinen tidligst 
+gennemføre "Fe" (instruktionshentning) for efterfølgende instruktioner, når PC er opdateret. Den sidste regel
+ for alle instruktioner: "depend(Fe, PC)" er så indlysende at vi ikke vil anføre den fremover.
 
 Den simpleste håndtering af betingede hop lyder:
 
@@ -161,9 +163,11 @@ Den simpleste håndtering af betingede hop lyder:
 hop taget:       produce(Ex, PC)
 hop ikke taget:  -
 ~~~
-Her har et hop der ikke tages ingen betydning for timingen af afviklingen af de efterfølgende instruktioner. Kun hop der tages vil kunne forsinke efterfølgende instruktioner.
+Her har et hop der ikke tages ingen betydning for timingen af afviklingen af de efterfølgende instruktioner. 
+Kun hop der tages vil kunne forsinke efterfølgende instruktioner.
 
-En ofte anvendt fremgangsmåde i en simpel pipeline er at hop, der hopper mod en lavere adresse forudsiges som tagne, mens et hop der hopper mod en højere adresse forudsiges ikke tagne. Denne forudsigelse laves i "De", da man er nød til at afkode hoppet for at bestemme adressen. Det giver følgende specifikation:
+En ofte anvendt fremgangsmåde i en simpel pipeline er at hop, der hopper mod en lavere adresse forudsiges som tagne, 
+mens et hop der hopper mod en højere adresse forudsiges ikke tagne. Denne forudsigelse laves i "De", da man er nød til at afkode hoppet for at bestemme adressen. Det giver følgende specifikation:
 
 ~~~
 hop baglæns taget:       produce(De, PC)

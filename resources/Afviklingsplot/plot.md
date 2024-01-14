@@ -1,5 +1,7 @@
 # Afviklingsplot og Mikroarkitektur
 
+Opdateret 14. januar 2024 med diverse rettelser.
+
 Opdateret 9. december 2023 med rettelse af "Mm" til "Me" for at matche tidligere introduceret notation.
 
 Opdateret 15. januar 2023 med rettelse af indrykning i svar til øvelse 2.

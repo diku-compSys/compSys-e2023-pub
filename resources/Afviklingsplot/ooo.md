@@ -5,6 +5,16 @@ Alle moderne højtydende processor-kerner har samme grundlæggende design som pr
 nedenfor. Præsentationen her har til formål at gøre performance overvejelser
 meningsfuld, så vi vil se bort fra mange detaljer.
 
+Out-of-order execution bygger på tre overordnede design principper
+
+* Forudsigelse af programforløb. Maskinen opsamler statistik om programmets
+  opførsel og forudsiger på basis heraf programforløbet.
+* Spekulativ udførelse. Instruktioner udføres før det er afgjort om de skal.
+* Udførelse i dataflow-rækkefølge. Instruktioner udføres tidligst muligt efter
+  at deres operander er til rådighed og uden hensyn til deres rækkefølge i
+  programforløbet.
+
+Alle tre design principper er nødvendige for at få høj ydeevne.
 
 ### Overordnet struktur (mikroarkitektur)
 
@@ -63,7 +73,7 @@ og betinget hop. Disse to instruktioner fusioneres på IA64 almindeligvis til en
 
 Det er (ofte) en forudsætning for at fusionere to instruktioner:
 
- * At de har samme destinations register
+ * At de har det samme destinationsregister
  * At den sidste afhænger af den første
  * At de tilsammen max har to kilderegistre og en immediate
  * At de tilsammen kan udføres i et hug længere nede i pipelinen
@@ -141,7 +151,7 @@ graph TD
 Registeromdøbning udføres ved hjælp af en omdøbningstabel, "Register Alias Table" eller "RAT". 
 Denne tabel associerer hvert logisk registernummer med et fysisk registernummer. 
 Instruktionens logiske kilde-registre slås op i tabellen og de tilsvarende fysiske registernumre følger
-med instruktionen videre frem i maskinen. Sluttelig allokeres et fysisk destinationsregister
+med instruktionen videre frem i maskinen. Ved omdøbning allokeres et fysisk destinationsregister
 fra en friliste og omdøbningstabellen opdateres så den afspejler den nye binding fra
 logisk til fysisk registernummer.
 
@@ -153,8 +163,8 @@ Instruktionerne slutter deres liv i "bagenden" af mikroarkitekturen. Her findes 
 en omdøbningstabel, "Commit RAT", som holder afbildningen fra logisk til fysisk register
 for den ældste instruktion. Endnu en tæller holder rede på hvor den ældste instruktion
 befinder sig i bufferen. Den ældste instruktion *fuldføres* (eng: commits, retires)
-ved at dens tidligere fysiske destinations register læses fra "Commit RAT"
-og indsættes i frilisten. Derpå opdateres "Commit RAT" til det nye fysiske
+ved at dens tidligere fysiske destinations registernummer læses fra "Commit RAT"
+og indsættes i frilisten. Derpå opdateres "Commit RAT" til at udpege det nye fysiske
 destinationsregister for instruktionen.
 
 Omdøbning tager typisk et eller to trin, afhængigt af hvor mange instruktioner der
@@ -166,8 +176,11 @@ skal behandles samtidigt. Vi antager to trin som vi markerer med "Al" (allocate)
 Hvis en instruktion fejler (f.eks. tilgår reserveret lager, dividerer med nul) skal
 maskinen reagere ved at kalde en "exception handler." Moderne
 maskiner understøtter *præcise* exceptions: Herved forstås at en exception ses som
-associeret med *en* bestemt fejlende instruktion. Alle tidligere instruktioner vil være udført og
-alle efterfølgende vil ikke være udført. I en simpel pipeline kan dette sikres ved at
+associeret med *en* bestemt fejlende instruktion. Alle tidligere instruktioner skal 
+fremstå som værende udført og alle efterfølgende som ikke udført. 
+
+I en simpel pipeline modsvares instruktionernes rækkefølge i programudførelsen
+af deres placering i pipelinen. Derfor kan præcise exceptions sikres ved at
 have Wb trinnet *efter* det trin hvor fejl detekteres. I en out-of-order maskine
 med hundredevis af instruktioner i forskellige stadier af udførelse skal der andre
 boller på suppen.
@@ -214,9 +227,9 @@ af plads og tager et pipeline-trin. Vi markerer det med "Qu" (Queue) i vores flo
 ### Fuldførelse (bagende)
 
 Når en instruktion er udført uden fejl og blevet den ældste "fuldføres" den ved at
-"Commit RAT" omdøbningstabellen opdateres og det fysiske register associeret med den
-nye instruktions logiske register returneres til frilisten. Det tager to pipeline trin,
-som markeres med "Ca" og "Cb" i vores flow beskrivelse
+"Commit RAT" omdøbningstabellen opdateres og det fysiske registernummer associeret med den
+nye instruktions logiske destinationsregister returneres til frilisten. Det tager to pipeline trin,
+som markeres med "Ca" og "Cb" i vores flow beskrivelse.
 
 ### Opsamling af instruktions-"flow" for forende og bagende
 
@@ -237,15 +250,15 @@ hvor de indsættes i en "scheduler". Scheduleren består af to halvdele som udg�
 feedback sløjfe der hver cyclus udvælger instruktioner til udførelse. De to halvdele
 er:
 
- * Wakeup. Hver cycle signaleres hvilke fysiske registre der har fået skrevet en værdi.
-Det sammenlignes for hver instruktion i lageret med instruktionens fysiske kilderegistre.
+ * Wakeup. Hver cycle signaleres hvilke fysiske registre der forventes at få skrevet en værdi
+to cykler senere. Det sammenlignes for hver instruktion i scheduleren med instruktionens fysiske kilderegistre.
 Når en instruktion har "set" alle sine kilderegister markeres den som "vågen".
  * Pick. Flere instruktioner kan være vågne samtidig, og så skal der vælges i mellem
 dem. Oftest anvendes en tilnærmelse til "ældste først". Når instruktionerne er udvalgt
 kan deres fysiske destinationsregistre tilføjes til mængden af "skrevne" værdier i
 den følgende maskincyklus - eller senere, alt afhængig af de valgte instruktioners
 latenstid. En single-cycle ALU operation har en latenstid på 1, mens en load instruktion
-(jvf tidligere diskussion) har en latenstid på 4.
+(jvf tidligere diskussion) har en latenstid på 4. 
 
 I nogle maskiner er der mange små schedulere, som hver udvælger en instruktion, i andre
 er der færre schedulere som hver især kan udvælge flere instruktioner.
@@ -257,7 +270,7 @@ kort beskrive hvordan systemet håndterer en sådan "fejlschedulering".
 
 Når en instruktion er udvalgt skal den læse operander fra de fysiske kilde-registre
 før den endelig kan udføres og slutteligt skrive sit resultat til et fysisk destinationsregister.
-Der er mange fysiske registre, så læsning og skrivning kræver en fuld maskin cyklus hver.
+Der er mange fysiske registre, så læsning og skrivning af registre kræver en fuld maskin cyklus hver.
 
 De nye pipeline trin i dataflow-sektionen er:
 

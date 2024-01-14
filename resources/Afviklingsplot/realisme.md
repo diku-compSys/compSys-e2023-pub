@@ -43,11 +43,11 @@ gå i detaljer med hvad der sker i disse tre trin - de er bare trin Fa,Fb og Fc 
 Lad os genbruge eksemplet fra den superskalare maskine med afkoblet prefetching. Maskinen ser nu således ud:
 
 ~~~Test
-load:  "Fa Fb Fc Pr Qu De Ex Ma Mb Mc Wb"   depend(Ex,rs1), depend(Ex,rd), produce(Mc,rd)
-store: "Fa Fb Fc Pr Qu De Ex Ma Mb Mc"      depend(Ex,rs1), depend(Mc,rs2)
+load:  "Fa Fb Fc Pr Qu De Ag Ma Mb Mc Wb"   depend(Ag,rs1), depend(Ag,rd), produce(Mc,rd)
+store: "Fa Fb Fc Pr Qu De Ag Ma Mb Mc"      depend(Ag,rs1), depend(Mc,rs2)
 ubetinget hop: "Fa Fb Fc Pr Qu"             -
 betinget hop:  "Fa Fb Fc Pr Qu De Ex"       depend(Ex,rs1), depend(Ex,rs2)
-kald:  "Fa Fb Fc Pr Qu De Ex"               produce(Ex,rd)
+kald:  "Fa Fb Fc Pr Qu De Ex Wb"            produce(Ex,rd)
 retur: "Fa Fb Fc Pr Qu De Ex"               depend(Ex,rs1)
 andre: "Fa Fb Fc Pr Qu De Ex Wb"            depend(Ex,rs1), depend(Ex,rs2), depend(Ex,rd), produce(Ex,rd)
 
@@ -85,11 +85,16 @@ C:     addi x10,x10,4                          Fa Fb Fc Pr >> Qu De Ex Wb
 
 Nu er IPC blot 1.
 
-Det er tydeligt at den længere tilgangstid til instruktionscachen gør det vanskeligt at føde instruktioner til bagenden af maskinen hurtigt nok, selv ved brug af afkoblet prefetching.
+Det er tydeligt at den længere tilgangstid til instruktionscachen gør det vanskeligt at føde 
+instruktioner til bagenden af maskinen hurtigt nok, selv ved brug af afkoblet prefetching.
 
 #### Branch Target Buffer
 
-Ofte tilføjer man en BTB (Branch Target Buffer) til designet for at forbedre instruktionshentning yderligere. En BTB er en mindre lagerblok som kan tilgås med en del af PC'en og på en enkelt cyklus levere en muligt "branch target". Det gør det muligt at omdirigere instruktionshentning i løbet af Fb, så vi får følgende afviklingsplot:
+Ofte tilføjer man en BTB (Branch Target Buffer) til designet for at forbedre instruktionshentning yderligere. 
+En BTB er en mindre lagerblok som kan tilgås med en del af PC'en og på en enkelt cyklus levere en muligt "branch target". 
+Det gør det muligt at omdirigere instruktionshentning i løbet af Fa eller Fb (ofte bruges en lille BTB
+til at omdirigere i Fa og en større til at omdirigere i Fb). Hvis vi antager omdirigering i Fb får
+vi  følgende afviklingsplot:
 
 ~~~
                                 0  1  2  3  4  5  6  7  8  9  10 11 12 13 14 15
@@ -112,7 +117,8 @@ Det er selvfølgelig ikke altid at en BTB vil udpege den rette adresse, så oven
 
 #### Udfordringer ved den længere tilgang til datacachen
 
-Lad os prøve med en anden kodestump, en løkke der bestemmer summen af alle elementer i en tabel, men iøvrigt samme maskine:
+Lad os prøve med en anden kodestump, en løkke der bestemmer summen af alle elementer i en tabel, 
+men iøvrigt samme maskine:
 
 ~~~
 while (ptr < limit) { sum += *ptr++; }
