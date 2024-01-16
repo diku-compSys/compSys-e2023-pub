@@ -49,7 +49,7 @@
 |      | 10 Jan | Recap | TAs      | OS, Utne & Lucas, 13:15 to 15:00, HCØ Aud 02                                               |  |
 |      | 10 Jan | Recap | TAs      | Computer Networks, Lars & Jakob, 15:15 to 17:00, HCØ Aud 02                                               |  |
 |      | 12 Jan | Recap | TAs      | Machine Architecture, Kjartan, Axel & Christian, 13:15 to 16:00, HCØ Aud 02                                               |  |
-| 4    | 22 Jan |       | Everyone | Exam question session, recap and evaluation, kl. 13:15 @ Lundbeck Aud                                   |         |
+| 4    | 22 Jan |       | Everyone | Exam question session, recap and evaluation, 13:15 @ HCØ Aud 04               |         |
 |      | 24 Jan |       |          | CompSys Exam                                                                  |         |
 
 

@@ -155,7 +155,6 @@ See [skema.ku.dk](https://skema.ku.dk/tt/tt.asp?SDB=KU2324&language=DK&folder=Re
    * Tuesday 13-15: NBB 2.1.I.156
    * Friday 8-10: NBB 2.1.I.156
 
-
 ### Room details
 Map of Nørre Campus:
 https://nexs.ku.dk/kontakt/findvej/kort_norre-campus/
@@ -228,7 +227,7 @@ There are 7 assignment in total during the course with deadline roughly every se
 | A3: Client network distribution   | 19 Nov @ 16:00      |
 | A4: P2P networking and security   | 03 Dec @ 16:00      |
 | A5: Simple architecture.          | 17 Dec @ 16:00      |
-| A6: Pipelined architecture        | 07 Jan @ 16:00      |
+| A6: Pipelined architecture        | 10 Jan @ 22:00      |
 
 The assignments will be graded with points from 0 to 4 and it is not possible to re-hand-in any of the assignments.
 
