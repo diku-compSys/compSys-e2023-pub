@@ -52,7 +52,7 @@ Det beskrives senere hvordan disse problemer har en samlet løsning i out-of-ord
 I første omgang håndterer vi problem 1 og 2 ved at tilføje en dataafhængighed på instruktionernes destinationsregister:
 
 ~~~
-aritmetisk op: depend(Ex,Rs1),depend(Ex,rs2),depend(Ex,rd),produce(Wb,rd)
+aritmetisk op: depend(Ex,Rs1),depend(Ex,rs2),depend(Ex,rd),produce(Ex,rd)
 ~~~
 
 Dette vil sikre at der maximalt er en instruktion for hvert register i trinnene fra Ex og frem ad gangen. Det udelukker forkert skrive rækkefølge og det sikrer at operand-referencer er unikke.
