@@ -21,7 +21,7 @@ Her vil vi kun forholde os til den første ændring.
 Kommunikation inkluderer her at sende et signal en bestemt afstand såvel som at
 sende et signal fra en til mange modtagere. Langsommere kommunikation 
 rammer ting som læsning fra registre eller fra cache med større effekt end det rammer 
-ALU-operationer. En anden ting der bliver ramt er lange forwarding-netværk.
+ALU-operationer.
 
 Her er til sammenligning nogle mere realistiske tidsforbrug for forskellige aktiviteter
 
@@ -38,20 +38,24 @@ På grund af (især) den relativt langsommere tilgang til cache bliver moderne p
 længere end bogens. I almindelighed bruges 3 pipeline trin til cache-tilgang. Vi vil ikke
 gå i detaljer med hvad der sker i disse tre trin - de er bare trin Fa,Fb og Fc samt Ma, Mb og Mc.
 
-#### Udfordringer ved instruktionshentning
+De lange pipelines er vanskeligere at udnytte fuldt ud end de simplere 5-trins pipelines.
+Der er udfordring ved både instruktionshentning og ved læsning af data fra datacachen.
+
+
+#### Et eksempel
 
 Lad os genbruge eksemplet fra den superskalare maskine med afkoblet prefetching. Maskinen ser nu således ud:
 
-~~~Test
+~~~
 load:  "Fa Fb Fc Pr Qu De Ag Ma Mb Mc Wb"   depend(Ag,rs1), depend(Ag,rd), produce(Mc,rd)
 store: "Fa Fb Fc Pr Qu De Ag Ma Mb Mc"      depend(Ag,rs1), depend(Mc,rs2)
-ubetinget hop: "Fa Fb Fc Pr Qu"             -
+ubetinget hop: "Fa Fb Fc Pr"                -
 betinget hop:  "Fa Fb Fc Pr Qu De Ex"       depend(Ex,rs1), depend(Ex,rs2)
 kald:  "Fa Fb Fc Pr Qu De Ex Wb"            produce(Ex,rd)
 retur: "Fa Fb Fc Pr Qu De Ex"               depend(Ex,rs1)
 andre: "Fa Fb Fc Pr Qu De Ex Wb"            depend(Ex,rs1), depend(Ex,rs2), depend(Ex,rd), produce(Ex,rd)
 
-ressourcer: Fa:4, Fb:4, Fc4, Pr:4, Qu: 4, De:2, Ex:2, Ag:1, Ma:1, Mb:1, Mc:1, Wb:2
+ressourcer: Fa:4, Fb:4, Fc4, Pr:4, Qu: 8, De:2, Ex:2, Ag:1, Ma:1, Mb:1, Mc:1, Wb:2
 
 ubetinget hop:                    produce(Pr, Pc)
 kald:                             produce(Pr, Pc)
@@ -61,7 +65,7 @@ betinget hop baglæns ikke taget:  produce(Ex, PC)
 betinget hop forlæns taget:       produce(Ex, PC)
 betinget hop forlæns ikke taget:  -
 ~~~
-Bemærk at store instruktioner først skal have den værdi de skal lagre i Mc, frem for i Ex.
+Bemærk at sb/sh/sw instruktioner først skal have den værdi de skal lagre i Mc, frem for i Ex.
 Dette er muligt fordi beregning af adresse og søgning i cache kan foregå uden den værdi der
 skal lagres. Og det er vigtigt for ydeevnen da vi derved kan undgå mange unødige pipeline
 stalls.
@@ -72,14 +76,14 @@ Vort eksempel fra tidligere giver nu følgende plot:
                                 0  1  2  3  4  5  6  7  8  9  10 11 12 13 14 15
 0:     lw   x12,0(x11)          Fa Fb Fc Pr Qu De Ag Ma Mb Mc Wb
 4:     addi x11,x11,4           Fa Fb Fc Pr Qu De Ex Wb
-8:     sw   x12,0(x10)          Fa Fb Fc Pr >> Qu De Ag Ma Mb Mc
-C:     addi x10,x10,4           Fa Fb Fc Pr >> Qu De Ex Wb
-10:    bne  x11,x15,0              Fa Fb Fc Pr >> Qu De Ex
+8:     sw   x12,0(x10)          Fa Fb Fc Pr Qu Qu De Ag Ma Mb Mc
+C:     addi x10,x10,4           Fa Fb Fc Pr Qu Qu De Ex Wb
+10:    bne  x11,x15,0              Fa Fb Fc Pr Qu Qu De Ex
 0:     lw   x12,0(x11)                         Fa Fb Fc Pr Qu De Ag Ma Mb Mc Wb
 4:     addi x11,x11,4                          Fa Fb Fc Pr Qu De Ex Wb
-8:     sw   x12,0(x10)                         Fa Fb Fc Pr >> Qu De Ag Ma Mb Mc
-C:     addi x10,x10,4                          Fa Fb Fc Pr >> Qu De Ex Wb
-10:    bne  x11,x15,0                             Fa Fb Fc Pr >> Qu De Ex
+8:     sw   x12,0(x10)                         Fa Fb Fc Pr Qu Qu De Ag Ma Mb Mc
+C:     addi x10,x10,4                          Fa Fb Fc Pr Qu Qu De Ex Wb
+10:    bne  x11,x15,0                             Fa Fb Fc Pr Qu Qu De Ex
 0:     ...                                                    Fa Fb Fc Pr Qu De Ex....
 ~~~
 
@@ -87,33 +91,37 @@ Nu er IPC blot 1.
 
 Det er tydeligt at den længere tilgangstid til instruktionscachen gør det vanskeligt at føde 
 instruktioner til bagenden af maskinen hurtigt nok, selv ved brug af afkoblet prefetching.
+Det er nødvendigt at forudsige programforløbet tidligere. Før maskinen har modtaget og 
+afkodet hop-instruktionen fra instruktionscachen.
 
-#### Branch Target Buffer
+#### Dynamisk forudsigelse af programforløbet
 
-Ofte tilføjer man en BTB (Branch Target Buffer) til designet for at forbedre instruktionshentning yderligere. 
-En BTB er en mindre lagerblok som kan tilgås med en del af PC'en og på en enkelt cyklus levere en muligt "branch target". 
-Det gør det muligt at omdirigere instruktionshentning i løbet af Fa eller Fb (ofte bruges en lille BTB
-til at omdirigere i Fa og en større til at omdirigere i Fb). Hvis vi antager omdirigering i Fb får
-vi  følgende afviklingsplot:
+Ofte tilføjer man en BTB (Branch Target Buffer) til designet for at forbedre instruktionshentning 
+yderligere. En BTB er en mindre lagerblok som tilgås med en del af PC'en og på en enkelt cyklus
+leverer et muligt "branch target". 
+En BTB gør det muligt at omdirigere instruktionshentning i løbet af Fa eller Fb (ofte bruges en lille BTB
+til at omdirigere i Fa og en større til at omdirigere i Fb). Hvis vi antager omdirigering i Fa får
+vi følgende afviklingsplot:
 
 ~~~
                                 0  1  2  3  4  5  6  7  8  9  10 11 12 13 14 15
 0:     lw   x12,0(x11)          Fa Fb Fc Pr Qu De Ag Ma Mb Mc Wb
 4:     addi x11,x11,4           Fa Fb Fc Pr Qu De Ex Wb
-8:     sw   x12,0(x10)          Fa Fb Fc Pr >> Qu De Ag Ma Mb Mc
-C:     addi x10,x10,4           Fa Fb Fc Pr >> Qu De Ex Wb
-10:    bne  x11,x15,0              Fa Fb Fc Pr >> Qu De Ex
-0:     lw   x12,0(x11)                   Fa Fb Fc Pr Qu De Ag Ma Mb Mc Wb
-4:     addi x11,x11,4                    Fa Fb Fc Pr Qu De Ex Wb
-8:     sw   x12,0(x10)                   Fa Fb Fc Pr >> Qu De Ag Ma Mb Mc
-C:     addi x10,x10,4                    Fa Fb Fc Pr >> Qu De Ex Wb
-10:    bne  x11,x15,0                       Fa Fb Fc Pr >> Qu De Ex
-0:     ...                                        Fa Fb Fc Pr Qu De Ex....
+8:     sw   x12,0(x10)          Fa Fb Fc Pr Qu Qu De Ag Ma Mb Mc
+C:     addi x10,x10,4           Fa Fb Fc Pr Qu Qu De Ex Wb
+10:    bne  x11,x15,0              Fa Fb Fc Pr Qu Qu De Ex
+0:     lw   x12,0(x11)                Fa Fb Fc Pr Qu De Ag Ma Mb Mc Wb
+4:     addi x11,x11,4                 Fa Fb Fc Pr Qu Qu De Ex Wb
+8:     sw   x12,0(x10)                Fa Fb Fc Pr Qu Qu De Ag Ma Mb Mc
+C:     addi x10,x10,4                 Fa Fb Fc Pr Qu Qu Qu De Ex Wb
+10:    bne  x11,x15,0                    Fa Fb Fc Pr Qu Qu De Ex
+0:     ...                                  Fa Fb Fc Pr Qu Qu De Ex....
 ~~~
 
 Her er IPC 5/3
 
-Det er selvfølgelig ikke altid at en BTB vil udpege den rette adresse, så ovenstående er et optimistisk billede.
+Det er selvfølgelig ikke altid at en BTB vil udpege den rette adresse, så ovenstående er et 
+optimistisk billede.
 
 #### Udfordringer ved den længere tilgang til datacachen
 
@@ -130,19 +138,24 @@ To gennemløb:
                                 0  1  2  3  4  5  6  7  8  9
 0:  lw x11,0(x10)               Fa Fb Fc Pr Qu De Ag Ma Mb Mc Wb
 4:  add x10,x10,4               Fa Fb Fc Pr Qu De Ex Wb
-8:  add x12,x12,x11             Fa Fb Fc Pr >> Qu >> >> >> De Ex Wb
-C:  bne x10,x13,0               Fa Fb Fc Pr >> Qu >> >> >> De Ex
-0:  lw x11,0(x10)                     Fa Fb Fc Pr >> >> >> Qu De Ag Ma Mb Mc Wb
-4:  add x10,x10,4                     Fa Fb Fc Pr >> >> >> Qu De Ex Wb
-8:  add x12,x12,x11                   Fa Fb Fc >> >> >> Pr >> Qu >> >> >> De Ex Wb
-C:  bne x10,x13,0                     Fa Fb Fc >> >> >> Pr >> Qu >> >> >> De Ex
+8:  add x12,x12,x11             Fa Fb Fc Pr Qu Qu De De De De Ex Wb
+C:  bne x10,x13,0               Fa Fb Fc Pr Qu Qu De De De De Ex
+0:  lw x11,0(x10)                  Fa Fb Fc Pr Qu Qu Qu Qu Qu De Ag Ma Mb Mc Wb
+4:  add x10,x10,4                  Fa Fb Fc Pr Qu Qu Qu Qu Qu De Ex Wb
+8:  add x12,x12,x11                Fa Fb Fc Pr Qu Qu Qu Qu Qu Qu De De De De Ex Wb
+C:  bne x10,x13,0                  Fa Fb Fc Pr Qu Qu Qu Qu Qu Qu De De De De Ex
 ~~~
 
 For en IPC på 1.
 
-Her er instruktionshentning ikke den begrænsende faktor. I stedet er det instruktioner der skal vente
-på resultatet af en load der er mest begrænsende. De skal vente i "De" indtil resultatet fra load instruktionen 
-kan forwardes i slutningen af "Mc".
+Her er det tydeligt af forenden af pipelinen "løber i forvejen" og henter instruktioner
+hurtigere end bagenden kan følge med. De hentede instruktioner akkumuleres i "Qu".
+
+I denne situation er instruktionshentning ikke den begrænsende faktor. I stedet er det instruktioner
+der skal vente på resultatet af en load der er mest begrænsende. De skal vente i "De" indtil 
+resultatet fra load instruktionen kan forwardes i slutningen af "Mc". 
+Bemærk også at "Ex" fasen, hvor de betingede hop afgøres må vente i "De" fordi vi kun tillader
+instruktioner at forlade "De" i programrækkefølge.
 
 ### Opsamling
 

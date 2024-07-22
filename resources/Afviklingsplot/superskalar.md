@@ -1,12 +1,15 @@
 
 ## Superskalar mikroarkitektur
 
-En maskine der kan udføre to eller flere instruktioner samtidigt kaldes "superskalar".
+En maskine der kan udføre to eller flere instruktioner samtidigt i samme pipeline trin 
+kaldes "superskalar".
 
 ### Ressourcebegrænsninger
 
-De første superskalare kunne udføre to instruktioner samtidigt. Men det var ikke to vilkårlige instruktioner.
-Det gik an at bygge en maskine med to ALUer, men de dyreste ressourcer kunne man stadig kun have en af: multiplikations-kredsløbet og tilgangen til lageret (den primære datacache).
+De første superskalare kunne udføre to instruktioner samtidigt. Men det var ikke to vilkårlige
+instruktioner. Det gik an at bygge en maskine med to ALUer, men de dyreste ressourcer 
+kunne man stadig kun have en af: multiplikations-kredsløbet og tilgangen til lageret
+(den primære datacache).
 
 Vi kan beskrive denne ressource-inddeling således:
 
@@ -17,7 +20,8 @@ andre: "Fe De Ex Wb"
 
 ressourcer: Fe:2, De:2, Ex:2, Ag:1, Me:1, Wb:2
 ~~~
-Forkortelsen "Ag" står for "Address generate" som så erstatter brugen af den generelle ALU til at beregne adresser ved lagertilgang.
+Forkortelsen "Ag" står for "Address generate" og erstatter brugen af den generelle ALU
+til at beregne adresser ved lagertilgang.
 
 Her er et plot af to iterationer af en løkke der kopierer data fra et område til et andet:
 
@@ -41,23 +45,34 @@ C:     addi x10,x10,4                          Fe De Ex Wb
 
 for en IPC omkring 1.2 (5/4)
 
-Bemærk at Wb i dette plot ikke gennemløbes i programrækkefølge. Det er en følge af at vi har angivet forskellige længder af "flow" for de forskellige instruktioner, samtidig med at de deler Wb. Uden at overveje det nøje har vi derved specificeret en maskine, som ikke er helt så simpel at bygge. Der er flere udfordringer:
+Bemærk at Wb i dette plot ikke gennemløbes i programrækkefølge. 
+Det er en følge af at vi har angivet forskellige længder af "flow" for de forskellige instruktioner,
+samtidig med at de deler Wb. Uden at overveje det nøje har vi derved specificeret en maskine, 
+som ikke er helt så simpel at bygge. Der er flere udfordringer:
 
-1. Sikring af korrekt skrive-rækkefølge: Hvad hvis to instruktioner begge skal opdatere samme register, men den sidste når Wb før den første?
-2. Korrekt hazard-detektion og forwarding: Hvis der er flere instruktioner med samme destinationsregister in-flight, hvilken af dem matcher så en senere instruktions kilde-register?
-3. Exception håndtering: Hvad hvis en instruktion med sen Wb trigger en exception, hvilket opdages i Wb eller trinnet før, mens en senere instruktion med tidlig Wb opdaterer sit destinationsregister? Den senere instruktion må logisk set ikke udføres.
+1. Sikring af korrekt skrive-rækkefølge: Hvad hvis to instruktioner begge skal opdatere samme register, 
+   men den sidste når Wb før den første?
+2. Korrekt hazard-detektion og forwarding: Hvis der er flere instruktioner med samme destinationsregister
+   in-flight, hvilken af deres resultater matcher så en senere instruktions reference til dette register?
+3. Exception håndtering: Hvad hvis en instruktion med sen Wb trigger en exception, hvilket opdages 
+   i Wb eller trinnet før, mens en senere instruktion med tidlig Wb opdaterer sit destinationsregister?
+   Den senere instruktion må logisk set ikke udføres.
 
 Det beskrives senere hvordan disse problemer har en samlet løsning i out-of-order maskiner.
 
-I første omgang håndterer vi problem 1 og 2 ved at tilføje en dataafhængighed på instruktionernes destinationsregister:
+I første omgang håndterer vi problem 1 og 2 ved at tilføje en dataafhængighed på instruktionernes 
+destinationsregister:
 
 ~~~
 aritmetisk op: depend(Ex,Rs1),depend(Ex,rs2),depend(Ex,rd),produce(Ex,rd)
 ~~~
 
-Dette vil sikre at der maximalt er en instruktion for hvert register i trinnene fra Ex og frem ad gangen. Det udelukker forkert skrive rækkefølge og det sikrer at operand-referencer er unikke.
+Dette vil sikre at der maximalt er en instruktion for hvert register i trinnene fra Ex og frem ad gangen. 
+Det udelukker forkert skrive rækkefølge og det sikrer at operand-referencer er unikke.
 
-Vi løser problem 3 ved at antage eksistensen af en backup-mekanisme som tager kopier af destinationsregistre før de skrives. I tilfælde af en exception bruges backuppen til at retablere registrene til den korrekte tilstand.
+Vi løser problem 3 ved at antage eksistensen af en backup-mekanisme som tager kopier af 
+destinationsregistre før de skrives. I tilfælde af en exception bruges backuppen til at 
+retablere registrene til den korrekte tilstand.
 
 
 ### Kontrolafhængigheder
@@ -112,7 +127,7 @@ IPC er her 10/6
 
 Det er også muligt at forbedre håndteringen af hop, kald og retur ved at smide flere hardware-ressourcer
 efter problemet. En ofte anvendt fremgangsmåde går ud på at splitte pipelinen i en for-ende og en bag-ende 
-adskilt af en mindre kø, hvor forenden overdimensioneres. Dette design tillader forenden at "kigge frem"
+adskilt af en mindre kø, og overdimensionere forenden. Dette design tillader forenden at "kigge frem"
 i instruktionsstrømmen og forudsige hop, kald og retur tidligere. Det er nødvendigt at udvide pipelinen
 med to trin mellem Fe og De som vi vil kalde "Pr" og "Qu" hvilket står for henholdsvis "predict" og "queue". 
 
@@ -140,20 +155,23 @@ betinget hop forlæns taget:       produce(Ex, PC)
 betinget hop forlæns ikke taget:  -
 ~~~
 
+Her er altså mulighed for at håndtere 4 instruktioner per trin i forenden
+af pipelinen, men færre i bagenden.
+
 To iterationer af vores løkke fra tidligere afsnit giver følgende plot:
 
 ~~~
                                 0  1  2  3  4  5  6  7  8  9  10 11 12 13 14 15
 0:     lw   x12,0(x11)          Fe Pr Qu De Ag Me Wb
 4:     addi x11,x11,4           Fe Pr Qu De Ex Wb
-8:     sw   x12,0(x10)          Fe Pr >> Qu De Ag Me
-C:     addi x10,x10,4           Fe Pr >> Qu De Ex Wb
-10:    bne  x11,x15,0              Fe Pr >> Qu De Ex
+8:     sw   x12,0(x10)          Fe Pr Qu Qu De Ag Me
+C:     addi x10,x10,4           Fe Pr Qu Qu De Ex Wb
+10:    bne  x11,x15,0              Fe Pr Qu Qu De Ex
 0:     lw   x12,0(x11)                   Fe Pr Qu De Ag Me Wb
 4:     addi x11,x11,4                    Fe Pr Qu De Ex Wb
-8:     sw   x12,0(x10)                   Fe Pr >> Qu De Ag Me
-C:     addi x10,x10,4                    Fe Pr >> Qu De Ex Wb
-10:    bne  x11,x15,0                       Fe Pr >> Qu De Ex
+8:     sw   x12,0(x10)                   Fe Pr Qu Qu De Ag Me
+C:     addi x10,x10,4                    Fe Pr Qu Qu De Ex Wb
+10:    bne  x11,x15,0                       Fe Pr Qu Qu De Ex
 0:     ...                                        Fe Pr Qu De Ex....
 ~~~
 

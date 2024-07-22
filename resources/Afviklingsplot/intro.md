@@ -120,10 +120,12 @@ load: "Fe De Ex Me Wb"   depend(Ex,rs1), produce(Me,rd)
 store: "Fe De Ex Me"     depend(Ex,rs1), depend(Me,rs2)
 andre: "Fe De Ex Wb"     depend(Ex,rs1), depend(Ex,rs2), produce(Ex,rd)
 ~~~
-Her refererer "rs1", "rs2" og "rd" til de to kilderegistre og destinationsregisteret på samme måde som på den grønne side forrest i COD.
-Ideen er at en instruktion der anfører depend(Ex,rs1) tidligst kan gennemføre "Ex" i en cyklus efter at rs1 er blevet produceret.
+Her refererer "rs1", "rs2" og "rd" til de to kilderegistre og destinationsregisteret på samme måde 
+som på den grønne side forrest i COD. Ideen er at en instruktion der anfører depend(Ex,rs1) 
+tidligst kan påbegynd "Ex" i en cyklus efter at rs1 er blevet produceret.
 
-Ovenstående specifikation svarer til en pipeline med fuld forwarding og vil resultere i det afviklingsplot vi allerede har set.
+Ovenstående specifikation svarer til en pipeline med fuld forwarding og vil resultere i det 
+afviklingsplot vi allerede har set.
 
 Vi kan beskrive en pipeline helt uden forwarding således:
 
@@ -132,6 +134,7 @@ load: "Fe De Ex Me Wb"   depend(Ex,rs1), produce(Wb,rd)
 store: "Fe De Ex Me"     depend(Ex,rs1), depend(Ex,rs2)
 andre: "Fe De Ex Wb"     depend(Ex,rs1), depend(Ex,rs2), produce(Wb,rd)
 ~~~
+
 Hvilket giver anledning til dette afviklingsplot:
 
 ~~~
@@ -146,7 +149,9 @@ Her opnås kun en IPC på 4/7.
 
 ### Kontrolafhængigheder (hop, kald, retur)
 
-Kontrolafhængigheder specificeres på samme måde som dataafhængigheder men med angivelse af et særlig register: "PC".
+Kontrolafhængigheder specificeres på samme måde som dataafhængigheder men med 
+angivelse af et særlig register: "PC".
+
 Eksempel:
 
 ~~~
@@ -166,8 +171,12 @@ hop ikke taget:  -
 Her har et hop der ikke tages ingen betydning for timingen af afviklingen af de efterfølgende instruktioner. 
 Kun hop der tages vil kunne forsinke efterfølgende instruktioner.
 
-En ofte anvendt fremgangsmåde i en simpel pipeline er at hop, der hopper mod en lavere adresse forudsiges som tagne, 
-mens et hop der hopper mod en højere adresse forudsiges ikke tagne. Denne forudsigelse laves i "De", da man er nød til at afkode hoppet for at bestemme adressen. Det giver følgende specifikation:
+Denne fremgangsmåde betegnes "ingen hopforudsigelse" eller "hop forudsagt ikke taget"
+
+En lidt bedre og ofte anvendt fremgangsmåde i en simpel pipeline er at hop, 
+der hopper mod en lavere adresse forudsiges som tagne, mens et hop der hopper mod en 
+højere adresse forudsiges ikke tagne. Denne forudsigelse laves gerne i "De", da man der
+har afkodet hoppet og kan bestemme adressen der hoppes til. Det giver følgende specifikation:
 
 ~~~
 hop baglæns taget:       produce(De, PC)
@@ -175,6 +184,8 @@ hop baglæns ikke taget:  produce(Ex, PC)
 hop forlæns taget:       produce(Ex, PC)
 hop forlæns ikke taget:  -
 ~~~
+
+Denne fremgangsmåde betegnes "bwtfnt" (backward taken, forward not taken).
 
 Her er en sekvens af instruktioner med to hop bagud, det første tages, det andet ikke:
 

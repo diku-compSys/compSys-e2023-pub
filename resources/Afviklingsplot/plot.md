@@ -1,5 +1,13 @@
 # Afviklingsplot og Mikroarkitektur
 
+af Finn Schiermer Andersen.
+
+Opdateret forår 2024 med forbedringer i beskrivelse af out-of-order maskinen
+
+* simplere beskrivelse af registeromdøbning
+* udvidet beskrivelse af forudsigelse af programforløb
+* mere præcis beskrivelse af planlægning
+
 Opdateret 14. januar 2024 med diverse rettelser.
 
 Opdateret 9. december 2023 med rettelse af "Mm" til "Me" for at matche tidligere introduceret notation.
